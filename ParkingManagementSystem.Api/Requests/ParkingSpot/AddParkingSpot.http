@@ -1,0 +1,11 @@
+@Host = http://localhost:5196
+
+POST {{Host}}/api/parkingspots
+Content-Type: application/json
+
+{
+    "name": "P01",
+    "description": "In front of the main entrance.",
+    "state": 2
+}
+###
