@@ -1,3 +1,6 @@
+using System.Reflection;
+using Mapster;
+using MapsterMapper;
 using ParkingManagementSystem.Application;
 using ParkingManagementSystem.Domain;
 using ParkingManagementSystem.Infrastructure;
@@ -9,7 +12,12 @@ builder.Services.AddOpenApi();
 builder.Services
     .AddApplicationLayer()
     .AddDomainLayer()
-    .AddInfrastructureLayer();
+    .AddInfrastructureLayer(builder.Environment);
+
+var config = TypeAdapterConfig.GlobalSettings;
+config.Scan(Assembly.GetExecutingAssembly());
+builder.Services.AddSingleton(config);
+builder.Services.AddScoped<IMapper, ServiceMapper>();
 
 var app = builder.Build();
 
