@@ -12,7 +12,7 @@ builder.Services.AddOpenApi();
 builder.Services
     .AddApplicationLayer()
     .AddDomainLayer()
-    .AddInfrastructureLayer(builder.Environment);
+    .AddInfrastructureLayer(builder.Environment, builder.Configuration);
 
 var config = TypeAdapterConfig.GlobalSettings;
 config.Scan(Assembly.GetExecutingAssembly());
