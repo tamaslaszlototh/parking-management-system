@@ -1,6 +1,6 @@
 using ParkingManagementSystem.Domain.Common;
 
-namespace ParkingManagementSystem.Domain.AddParkingSpot.ValueObjects;
+namespace ParkingManagementSystem.Domain.ParkingSpot.ValueObjects;
 
 public sealed class ParkingSpotName : ValueObject
 {

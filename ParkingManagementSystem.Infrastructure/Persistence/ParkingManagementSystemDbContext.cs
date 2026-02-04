@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ParkingManagementSystem.Domain.AddParkingSpot;
+using ParkingManagementSystem.Domain.ParkingSpot;
 using ParkingManagementSystem.Domain.Common.Interfaces;
 
 namespace ParkingManagementSystem.Infrastructure.Persistence;

@@ -1,6 +1,6 @@
 using ErrorOr;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
-using ParkingManagementSystem.Domain.AddParkingSpot;
+using ParkingManagementSystem.Domain.ParkingSpot;
 
 namespace ParkingManagementSystem.Infrastructure.Persistence.Repositories;
 

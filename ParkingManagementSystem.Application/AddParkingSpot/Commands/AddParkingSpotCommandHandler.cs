@@ -1,8 +1,8 @@
 using ErrorOr;
 using MediatR;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
-using ParkingManagementSystem.Domain.AddParkingSpot;
-using ParkingManagementSystem.Domain.AddParkingSpot.ValueObjects;
+using ParkingManagementSystem.Domain.ParkingSpot;
+using ParkingManagementSystem.Domain.ParkingSpot.ValueObjects;
 
 namespace ParkingManagementSystem.Application.AddParkingSpot.Commands;
 
