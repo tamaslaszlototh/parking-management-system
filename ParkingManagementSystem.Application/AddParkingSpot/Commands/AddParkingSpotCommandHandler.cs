@@ -23,7 +23,7 @@ public class AddParkingSpotCommandHandler : IRequestHandler<AddParkingSpotComman
             ParkingSpotDescription.Create(request.Description),
             request.State);
 
-        await _parkingSpotsRepository.AddAsync(parkingSpot);
+        await _parkingSpotsRepository.AddAsync(parkingSpot, cancellationToken);
         return parkingSpot;
     }
 }

@@ -12,9 +12,9 @@ public class ParkingSpotsRepository : IParkingSpotsRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddAsync(ParkingSpot parkingSpot)
+    public async Task AddAsync(ParkingSpot parkingSpot, CancellationToken cancellationToken)
     {
-        await _dbContext.AddAsync(parkingSpot);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.AddAsync(parkingSpot, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

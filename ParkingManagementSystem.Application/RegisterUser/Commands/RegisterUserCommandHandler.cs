@@ -18,7 +18,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
     public async Task<ErrorOr<User>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         var email = Email.Create(request.Email);
-        var user = await _userRepository.GetByEmailAsync(email);
+        var user = await _userRepository.GetByEmailAsync(email, cancellationToken);
         if (user is not null)
         {
             return Error.Conflict(description: "User already exists");
@@ -35,7 +35,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
             role: request.Role
         );
 
-        await _userRepository.AddAsync(newUser);
+        await _userRepository.AddAsync(newUser, cancellationToken);
         
         return newUser;
     }

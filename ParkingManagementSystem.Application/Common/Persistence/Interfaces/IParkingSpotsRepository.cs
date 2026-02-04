@@ -5,5 +5,5 @@ namespace ParkingManagementSystem.Application.Common.Persistence.Interfaces;
 
 public interface IParkingSpotsRepository
 {
-    Task AddAsync(ParkingSpot parkingSpot);
+    Task AddAsync(ParkingSpot parkingSpot, CancellationToken cancellationToken);
 }
