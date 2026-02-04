@@ -1,4 +1,3 @@
-using ErrorOr;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
 using ParkingManagementSystem.Domain.ParkingSpot;
 
@@ -13,10 +12,9 @@ public class ParkingSpotsRepository : IParkingSpotsRepository
         _dbContext = dbContext;
     }
 
-    public async Task<ErrorOr<ParkingSpot>> AddAsync(ParkingSpot parkingSpot)
+    public async Task AddAsync(ParkingSpot parkingSpot)
     {
         await _dbContext.AddAsync(parkingSpot);
         await _dbContext.SaveChangesAsync();
-        return parkingSpot;
     }
 }
