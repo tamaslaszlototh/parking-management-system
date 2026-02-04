@@ -1,0 +1,42 @@
+using ErrorOr;
+using MediatR;
+using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
+using ParkingManagementSystem.Domain.User;
+using ParkingManagementSystem.Domain.User.ValueObjects;
+
+namespace ParkingManagementSystem.Application.RegisterUser.Commands;
+
+public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, ErrorOr<User>>
+{
+    private readonly IUserRepository _userRepository;
+
+    public RegisterUserCommandHandler(IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
+    public async Task<ErrorOr<User>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    {
+        var email = Email.Create(request.Email);
+        var user = await _userRepository.GetByEmailAsync(email);
+        if (user is not null)
+        {
+            return Error.Conflict(description: "User already exists");
+        }
+
+        var hashedPassword = request.Password; //Todo: Hash password with BCrypt
+
+        var newUser = User.Create(
+            firstName: UserName.Create(request.FirstName),
+            lastName: UserName.Create(request.LastName),
+            email: Email.Create(request.Email),
+            password: Password.Create(hashedPassword),
+            phone: Phone.Create(request.Phone),
+            role: request.Role
+        );
+
+        await _userRepository.AddAsync(newUser);
+        
+        return newUser;
+    }
+}

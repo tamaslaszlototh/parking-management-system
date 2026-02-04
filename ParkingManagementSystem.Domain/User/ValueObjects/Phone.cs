@@ -6,6 +6,8 @@ public class Phone : ValueObject
 {
     public string Value { get; }
 
+    private const int MaxLength = 50;
+
     private Phone(string value)
     {
         Value = value;
@@ -13,6 +15,11 @@ public class Phone : ValueObject
 
     public static Phone Create(string phone)
     {
+        if (phone.Length > MaxLength)
+        {
+            throw new ArgumentException($"Phone number cannot be longer than {MaxLength} characters");
+        }
+
         return new Phone(phone);
     }
 
