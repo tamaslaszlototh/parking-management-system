@@ -2,7 +2,7 @@ using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ParkingManagementSystem.Application.AddParkingSpot.Commands;
-using ParkingManagementSystem.Contracts.ParkingSpot;
+using ParkingManagementSystem.Contracts.ParkingSpot.AddParkingSpot;
 
 namespace ParkingManagementSystem.Api.Controllers;
 

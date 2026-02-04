@@ -1,4 +1,4 @@
-namespace ParkingManagementSystem.Contracts.User;
+namespace ParkingManagementSystem.Contracts.User.RegisterUser;
 
 public record RegisterUserRequest(
     string FirstName,

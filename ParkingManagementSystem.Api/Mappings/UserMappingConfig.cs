@@ -1,6 +1,6 @@
 using Mapster;
 using ParkingManagementSystem.Application.RegisterUser.Commands;
-using ParkingManagementSystem.Contracts.User;
+using ParkingManagementSystem.Contracts.User.RegisterUser;
 using ParkingManagementSystem.Domain.User;
 
 namespace ParkingManagementSystem.Api.Mappings;
