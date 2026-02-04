@@ -1,8 +1,13 @@
 <Solution>
-  <Project Path="ParkingManagementSystem.Api\ParkingManagementSystem.Api.csproj" />
-  <Project Path="ParkingManagementSystem.Application/ParkingManagementSystem.Application.csproj" />
-  <Project Path="ParkingManagementSystem.Contracts/ParkingManagementSystem.Contracts.csproj" />
-  <Project Path="ParkingManagementSystem.Domain/ParkingManagementSystem.Domain.csproj" />
-  <Project Path="ParkingManagementSystem.Infrastructure/ParkingManagementSystem.Infrastructure.csproj" />
-  <Project Path="ParkingManagementSystem.Tests/ParkingManagementSystem.Tests.csproj" />
+  <Folder Name="/src/">
+    <Project Path="ParkingManagementSystem.Api\ParkingManagementSystem.Api.csproj" />
+    <Project Path="ParkingManagementSystem.Application/ParkingManagementSystem.Application.csproj" />
+    <Project Path="ParkingManagementSystem.Contracts/ParkingManagementSystem.Contracts.csproj" />
+    <Project Path="ParkingManagementSystem.Domain/ParkingManagementSystem.Domain.csproj" />
+    <Project Path="ParkingManagementSystem.Infrastructure/ParkingManagementSystem.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="ParkingManagementSystem.Application.UnitTests/ParkingManagementSystem.Application.UnitTests.csproj" />
+    <Project Path="ParkingManagementSystem.Domain.UnitTests/ParkingManagementSystem.Domain.UnitTests.csproj" />
+  </Folder>
 </Solution>
