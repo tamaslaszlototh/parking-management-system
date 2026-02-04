@@ -2,8 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
+using ParkingManagementSystem.Application.Common.Services;
 using ParkingManagementSystem.Infrastructure.Persistence;
 using ParkingManagementSystem.Infrastructure.Persistence.Repositories;
+using ParkingManagementSystem.Infrastructure.Services;
 
 namespace ParkingManagementSystem.Infrastructure;
 
@@ -21,6 +23,7 @@ public static class DependencyInjection
 
         services.AddScoped<IParkingSpotsRepository, ParkingSpotsRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IPasswordService, BCryptPasswordService>();
 
         return services;
     }

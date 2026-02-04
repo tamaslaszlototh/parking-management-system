@@ -1,6 +1,7 @@
 using ErrorOr;
 using MediatR;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
+using ParkingManagementSystem.Application.Common.Services;
 using ParkingManagementSystem.Domain.User;
 using ParkingManagementSystem.Domain.User.ValueObjects;
 
@@ -9,10 +10,12 @@ namespace ParkingManagementSystem.Application.RegisterUser.Commands;
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, ErrorOr<User>>
 {
     private readonly IUserRepository _userRepository;
+    private readonly IPasswordService _passwordService;
 
-    public RegisterUserCommandHandler(IUserRepository userRepository)
+    public RegisterUserCommandHandler(IUserRepository userRepository, IPasswordService passwordService)
     {
         _userRepository = userRepository;
+        _passwordService = passwordService;
     }
 
     public async Task<ErrorOr<User>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -24,7 +27,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
             return Error.Conflict(description: "User already exists");
         }
 
-        var hashedPassword = request.Password; //Todo: Hash password with BCrypt
+        var hashedPassword = _passwordService.Hash(request.Password);
 
         var newUser = User.Create(
             firstName: UserName.Create(request.FirstName),
