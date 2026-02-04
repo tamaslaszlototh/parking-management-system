@@ -1,12 +1,14 @@
 using MapsterMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ParkingManagementSystem.Application.AddParkingSpot.Commands;
-using ParkingManagementSystem.Contracts.ParkingSpot;
+using ParkingManagementSystem.Contracts.ParkingSpot.AddParkingSpot;
 
 namespace ParkingManagementSystem.Api.Controllers;
 
 [Route("api/[controller]")]
+[Authorize(Roles = "ParkingAdministrator")]
 public class ParkingSpotsController : ApiController
 {
     private readonly IMapper _mapper;
@@ -18,7 +20,7 @@ public class ParkingSpotsController : ApiController
         _mediator = mediator;
     }
 
-    [HttpPost] //Todo: Authorize for Parking Administrator only
+    [HttpPost]
     public async Task<IActionResult> AddParkingSpot(AddParkingSpotRequest request)
     {
         var command = _mapper.Map<AddParkingSpotCommand>(request);

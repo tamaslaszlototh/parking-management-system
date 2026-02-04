@@ -1,7 +1,7 @@
 using ErrorOr;
 using MediatR;
-using ParkingManagementSystem.Domain.AddParkingSpot;
-using ParkingManagementSystem.Domain.AddParkingSpot.Enums;
+using ParkingManagementSystem.Domain.ParkingSpot;
+using ParkingManagementSystem.Domain.ParkingSpot.Enums;
 
 namespace ParkingManagementSystem.Application.AddParkingSpot.Commands;
 

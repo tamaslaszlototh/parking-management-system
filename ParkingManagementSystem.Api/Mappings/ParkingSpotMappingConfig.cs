@@ -1,7 +1,7 @@
 using Mapster;
 using ParkingManagementSystem.Application.AddParkingSpot.Commands;
-using ParkingManagementSystem.Contracts.ParkingSpot;
-using ParkingManagementSystem.Domain.AddParkingSpot;
+using ParkingManagementSystem.Contracts.ParkingSpot.AddParkingSpot;
+using ParkingManagementSystem.Domain.ParkingSpot;
 
 namespace ParkingManagementSystem.Api.Mappings;
 

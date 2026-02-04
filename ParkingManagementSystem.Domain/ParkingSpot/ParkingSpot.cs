@@ -1,8 +1,8 @@
-using ParkingManagementSystem.Domain.AddParkingSpot.Enums;
-using ParkingManagementSystem.Domain.AddParkingSpot.ValueObjects;
+using ParkingManagementSystem.Domain.ParkingSpot.Enums;
+using ParkingManagementSystem.Domain.ParkingSpot.ValueObjects;
 using ParkingManagementSystem.Domain.Common;
 
-namespace ParkingManagementSystem.Domain.AddParkingSpot;
+namespace ParkingManagementSystem.Domain.ParkingSpot;
 
 public sealed class ParkingSpot : AggregateRoot
 {

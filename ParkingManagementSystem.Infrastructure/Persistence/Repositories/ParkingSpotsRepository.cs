@@ -1,6 +1,5 @@
-using ErrorOr;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
-using ParkingManagementSystem.Domain.AddParkingSpot;
+using ParkingManagementSystem.Domain.ParkingSpot;
 
 namespace ParkingManagementSystem.Infrastructure.Persistence.Repositories;
 
@@ -13,10 +12,9 @@ public class ParkingSpotsRepository : IParkingSpotsRepository
         _dbContext = dbContext;
     }
 
-    public async Task<ErrorOr<ParkingSpot>> AddAsync(ParkingSpot parkingSpot)
+    public async Task AddAsync(ParkingSpot parkingSpot, CancellationToken cancellationToken)
     {
-        await _dbContext.AddAsync(parkingSpot);
-        await _dbContext.SaveChangesAsync();
-        return parkingSpot;
+        await _dbContext.AddAsync(parkingSpot, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

@@ -1,4 +1,4 @@
-namespace ParkingManagementSystem.Domain.AddParkingSpot.Enums;
+namespace ParkingManagementSystem.Domain.ParkingSpot.Enums;
 
 public enum ParkingSpotState
 {

@@ -1,10 +1,12 @@
 using ErrorOr;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ParkingManagementSystem.Api.Controllers;
 
 [ApiController]
+[Authorize]
 public class ApiController : ControllerBase
 {
     protected IActionResult Problem(List<Error> errors)
@@ -17,6 +19,11 @@ public class ApiController : ControllerBase
         if (errors.All(error => error.Type == ErrorType.Validation))
         {
             return ValidationProblem(errors);
+        }
+
+        if (errors.All(error => error.Type == ErrorType.Unauthorized))
+        {
+            return Unauthorized();
         }
 
         return Problem(errors[0]);

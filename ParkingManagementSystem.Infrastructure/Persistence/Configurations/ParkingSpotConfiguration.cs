@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ParkingManagementSystem.Domain.AddParkingSpot;
-using ParkingManagementSystem.Domain.AddParkingSpot.Enums;
-using ParkingManagementSystem.Domain.AddParkingSpot.ValueObjects;
+using ParkingManagementSystem.Domain.ParkingSpot;
+using ParkingManagementSystem.Domain.ParkingSpot.Enums;
+using ParkingManagementSystem.Domain.ParkingSpot.ValueObjects;
 
 namespace ParkingManagementSystem.Infrastructure.Persistence.Configurations;
 
