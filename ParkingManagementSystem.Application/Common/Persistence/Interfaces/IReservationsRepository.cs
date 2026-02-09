@@ -6,4 +6,5 @@ public interface IReservationsRepository
 {
     Task AddAsync(Reservation reservation, CancellationToken cancellationToken);
     Task<bool> HasReservationForAsync(Guid userId, DateOnly date, CancellationToken cancellationToken);
+    Task<List<Guid>> GetReservedParkingSpotsForDate(DateOnly date, CancellationToken cancellationToken);
 }

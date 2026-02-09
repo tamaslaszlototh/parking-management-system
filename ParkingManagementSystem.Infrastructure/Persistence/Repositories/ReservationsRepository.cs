@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
 using ParkingManagementSystem.Domain.Reservation;
 
@@ -22,5 +23,13 @@ public class ReservationsRepository : IReservationsRepository
         CancellationToken cancellationToken)
     {
         return _dbContext.Reservations.Any(r => r.UserId == userId && r.ReservationDate == date);
+    }
+
+    public async Task<List<Guid>> GetReservedParkingSpotsForDate(DateOnly date, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Reservations
+            .Where(r => r.ReservationDate == date)
+            .Select(r => r.ParkingSpotId)
+            .ToListAsync(cancellationToken: cancellationToken);
     }
 }

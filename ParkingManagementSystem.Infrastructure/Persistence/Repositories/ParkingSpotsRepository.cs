@@ -30,21 +30,4 @@ public class ParkingSpotsRepository : IParkingSpotsRepository
         return await _dbContext.ParkingSpots.Where(p => p.State != ParkingSpotState.Deactivated)
             .ToListAsync(cancellationToken);
     }
-
-    public async Task<bool> FreeForReservationFor(DateOnly date, Guid userId, Guid parkingSpotId,
-        CancellationToken cancellationToken)
-    {
-        var hasReservationForDate =
-            await _dbContext.Reservations.AnyAsync(r => r.ReservationDate == date && r.ParkingSpotId == parkingSpotId,
-                cancellationToken: cancellationToken);
-
-        if (hasReservationForDate)
-        {
-            return false;
-        }
-        
-        //Todo: check if user has permission to reserve parking spot
-        
-        return true;
-    }
 }
