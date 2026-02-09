@@ -1,9 +1,9 @@
 using ErrorOr;
 using MediatR;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
-using ParkingManagementSystem.Domain.ParkingSpot.Enums;
+using ParkingManagementSystem.Domain.ParkingSpot;
 using ParkingManagementSystem.Domain.Reservation;
-using ParkingSpotErrors = ParkingManagementSystem.Domain.ParkingSpot.Errors.Errors.ParkingSpot;
+using ParkingManagementSystem.Domain.Reservation.Errors;
 using UserErrors = ParkingManagementSystem.Domain.User.Errors.Errors.User;
 
 namespace ParkingManagementSystem.Application.ReserveParkingSpot;
@@ -30,31 +30,41 @@ public class ReserveParkingSpotCommandHandler : IRequestHandler<ReserveParkingSp
             return UserErrors.UserNotFound();
         }
 
-        var parkingSpot = await _parkingSpotsRepository.GetByIdAsync(request.ParkingSpotId, cancellationToken);
-        if (parkingSpot is null)
+        var userHasReservationForDate =
+            await _reservationsRepository.HasReservationForAsync(request.UserId, request.Date, cancellationToken);
+
+        if (userHasReservationForDate)
         {
-            return ParkingSpotErrors.ParkingSpotNotFound();
+            return Errors.Reservation.UserAlreadyHasReservationForDate(request.Date);
         }
 
-        if (parkingSpot.State == ParkingSpotState.Deactivated)
+        var availableParkingSpots = await _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(cancellationToken);
+
+        var availableParkingSpotCount = availableParkingSpots.Count;
+        var counter = 0;
+        ParkingSpot? freeParkingSpot = null;
+
+        while (freeParkingSpot is null && counter < availableParkingSpotCount)
         {
-            return ParkingSpotErrors.ParkingSpotDeactivatedCannotBeReserved();
+            var parkingSpot = availableParkingSpots[counter];
+            var isParkingSpotFree =
+                await _parkingSpotsRepository.FreeForReservationFor(request.Date, request.UserId, parkingSpot.Id,
+                    cancellationToken);
+            if (isParkingSpotFree)
+            {
+                freeParkingSpot = parkingSpot;
+            }
+
+            counter++;
         }
-        
-        
-        //Todo: Check if the parking spot is dedicated and the user has permission to reserve it
 
-        var parkingSpotAlreadyReserved = await _reservationsRepository.HasReservationForAsync(
-            request.ParkingSpotId, request.Date, cancellationToken);
-
-        if (parkingSpotAlreadyReserved)
+        if (freeParkingSpot is null)
         {
-            return ParkingSpotErrors.ParkingSpotAlreadyReservedForDate(request.Date);
+            return Errors.Reservation.NotFoundFreeParkingSpot(request.Date);
         }
 
-        var reservation =
-            Reservation.Create(request.UserId, request.ParkingSpotId,
-                request.Date);
+
+        var reservation = Reservation.Create(request.UserId, freeParkingSpot.Id, request.Date);
 
         await _reservationsRepository.AddAsync(reservation, cancellationToken);
 

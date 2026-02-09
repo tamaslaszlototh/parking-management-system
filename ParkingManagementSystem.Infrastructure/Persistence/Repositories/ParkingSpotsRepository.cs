@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
 using ParkingManagementSystem.Domain.ParkingSpot;
+using ParkingManagementSystem.Domain.ParkingSpot.Enums;
 
 namespace ParkingManagementSystem.Infrastructure.Persistence.Repositories;
 
@@ -22,5 +23,28 @@ public class ParkingSpotsRepository : IParkingSpotsRepository
     public async Task<ParkingSpot?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _dbContext.ParkingSpots.FirstOrDefaultAsync(p => p.Id == id, cancellationToken: cancellationToken);
+    }
+
+    public async Task<List<ParkingSpot>> GetNotDeactivatedParkingSpotsAsync(CancellationToken cancellationToken)
+    {
+        return await _dbContext.ParkingSpots.Where(p => p.State != ParkingSpotState.Deactivated)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<bool> FreeForReservationFor(DateOnly date, Guid userId, Guid parkingSpotId,
+        CancellationToken cancellationToken)
+    {
+        var hasReservationForDate =
+            await _dbContext.Reservations.AnyAsync(r => r.ReservationDate == date && r.ParkingSpotId == parkingSpotId,
+                cancellationToken: cancellationToken);
+
+        if (hasReservationForDate)
+        {
+            return false;
+        }
+        
+        //Todo: check if user has permission to reserve parking spot
+        
+        return true;
     }
 }
