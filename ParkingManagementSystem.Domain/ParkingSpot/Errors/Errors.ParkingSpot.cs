@@ -12,5 +12,12 @@ public static class Errors
                 code: "ParkingSpotAlreadyReserved",
                 description: $"Parking spot is already reserved for this date {date}.");
         }
+
+        public static Error ParkingSpotNotFound()
+        {
+            return Error.NotFound(
+                code: "ParkingSpotNotFound",
+                description: "Parking spot not found.");
+        }
     }
 }

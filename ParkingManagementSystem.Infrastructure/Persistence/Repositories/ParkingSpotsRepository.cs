@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
 using ParkingManagementSystem.Domain.ParkingSpot;
 
@@ -16,5 +17,10 @@ public class ParkingSpotsRepository : IParkingSpotsRepository
     {
         await _dbContext.AddAsync(parkingSpot, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.ParkingSpots.AnyAsync(p => p.Id == id, cancellationToken: cancellationToken);
     }
 }
