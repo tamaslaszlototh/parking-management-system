@@ -1,13 +1,16 @@
 @Host = http://localhost:5196
+@UserId = 78128641-3c67-4c11-ace2-73c9dff1e8f6
+@ParkingSpotId = bb10cedd-416f-4bcf-9417-ae3b3880bf47
+@Date = 2026-02-09
 @Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3ODEyODY0MS0zYzY3LTRjMTEtYWNlMi03M2M5ZGZmMWU4ZjYiLCJnaXZlbl9uYW1lIjoiSm9obiIsImVtYWlsIjoiam9obi5kb2VAZGVtby5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJQYXJraW5nQWRtaW5pc3RyYXRvciIsImp0aSI6ImExZTY5NWI2LWUzYjQtNGEzNy1iNWJkLWE2ZTA3NzNjYjVmYSIsImV4cCI6MTc3MDYzMzQyNCwiaXNzIjoiUGFya2luZyBNYW5hZ2VtZW50IFN5c3RlbSBTZXJ2ZXIiLCJhdWQiOiJQYXJraW5nIE1hbmFnZW1lbnQgU3lzdGVtIENsaWVudCJ9.jzqPpvQMoSEInPMNzRqxsZsUI1gsZD379sFiQgL2KcY
 
-POST {{Host}}/api/parkingspots
-Content-Type: application/json
+POST {{Host}}/api/reservations/reserveparkingspot
 Authorization: Bearer {{Token}}
+Content-Type: application/json
 
 {
-    "name": "P01",
-    "description": "In front of the main entrance.",
-    "state": 2
+  "userId": "{{UserId}}",
+  "parkingSpotId": "{{ParkingSpotId}}",
+  "date": "{{Date}}"
 }
 ###

@@ -32,6 +32,7 @@ public static class DependencyInjection
 
         services.AddScoped<IParkingSpotsRepository, ParkingSpotsRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IReservationsRepository, ReservationsRepository>();
         services.AddScoped<IPasswordService, BCryptPasswordService>();
 
         return services;
