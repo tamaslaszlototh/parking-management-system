@@ -3,6 +3,7 @@ using MediatR;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
 using ParkingManagementSystem.Application.Common.Services;
 using ParkingManagementSystem.Domain.User;
+using ParkingManagementSystem.Domain.User.Errors;
 using ParkingManagementSystem.Domain.User.ValueObjects;
 
 namespace ParkingManagementSystem.Application.RegisterUser.Commands;
@@ -24,7 +25,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
         var user = await _userRepository.GetByEmailAsync(email, cancellationToken);
         if (user is not null)
         {
-            return Error.Conflict(description: "User already exists");
+            return Errors.User.UserAlreadyExists();
         }
 
         var hashedPassword = _passwordService.Hash(request.Password);
@@ -39,7 +40,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
         );
 
         await _userRepository.AddAsync(newUser, cancellationToken);
-        
+
         return newUser;
     }
 }
