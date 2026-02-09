@@ -1,6 +1,7 @@
 using ErrorOr;
 using MediatR;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
+using ParkingManagementSystem.Domain.ParkingSpot.Enums;
 using ParkingManagementSystem.Domain.Reservation;
 using ParkingSpotErrors = ParkingManagementSystem.Domain.ParkingSpot.Errors.Errors.ParkingSpot;
 using UserErrors = ParkingManagementSystem.Domain.User.Errors.Errors.User;
@@ -23,27 +24,37 @@ public class ReserveParkingSpotCommandHandler : IRequestHandler<ReserveParkingSp
 
     public async Task<ErrorOr<Success>> Handle(ReserveParkingSpotCommand request, CancellationToken cancellationToken)
     {
-        var parkingSpotExists = await _parkingSpotsRepository.ExistsAsync(request.ParkingSpotId, cancellationToken);
-        if (!parkingSpotExists)
-        {
-            return ParkingSpotErrors.ParkingSpotNotFound();
-        }
-
         var userExists = await _userRepository.ExistsAsync(request.UserId, cancellationToken);
         if (!userExists)
         {
             return UserErrors.UserNotFound();
         }
 
-        var parkingSpotReserved = await _reservationsRepository.HasReservationForAsync(
+        var parkingSpot = await _parkingSpotsRepository.GetByIdAsync(request.ParkingSpotId, cancellationToken);
+        if (parkingSpot is null)
+        {
+            return ParkingSpotErrors.ParkingSpotNotFound();
+        }
+
+        if (parkingSpot.State == ParkingSpotState.Deactivated)
+        {
+            return ParkingSpotErrors.ParkingSpotDeactivatedCannotBeReserved();
+        }
+        
+        
+        //Todo: Check if the parking spot is dedicated and the user has permission to reserve it
+
+        var parkingSpotAlreadyReserved = await _reservationsRepository.HasReservationForAsync(
             request.ParkingSpotId, request.Date, cancellationToken);
 
-        if (parkingSpotReserved)
+        if (parkingSpotAlreadyReserved)
         {
             return ParkingSpotErrors.ParkingSpotAlreadyReservedForDate(request.Date);
         }
 
-        var reservation = Reservation.Create(request.UserId, request.ParkingSpotId, request.Date);
+        var reservation =
+            Reservation.Create(request.UserId, request.ParkingSpotId,
+                request.Date);
 
         await _reservationsRepository.AddAsync(reservation, cancellationToken);
 

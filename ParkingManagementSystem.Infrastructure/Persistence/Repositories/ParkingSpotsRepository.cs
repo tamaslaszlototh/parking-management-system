@@ -19,8 +19,8 @@ public class ParkingSpotsRepository : IParkingSpotsRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<ParkingSpot?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _dbContext.ParkingSpots.AnyAsync(p => p.Id == id, cancellationToken: cancellationToken);
+        return await _dbContext.ParkingSpots.FirstOrDefaultAsync(p => p.Id == id, cancellationToken: cancellationToken);
     }
 }

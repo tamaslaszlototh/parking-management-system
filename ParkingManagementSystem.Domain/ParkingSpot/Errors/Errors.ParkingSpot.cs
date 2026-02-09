@@ -19,5 +19,12 @@ public static class Errors
                 code: "ParkingSpotNotFound",
                 description: "Parking spot not found.");
         }
+
+        public static Error ParkingSpotDeactivatedCannotBeReserved()
+        {
+            return Error.Forbidden(
+                code: "ParkingSpotDeactivatedCannotBeReserved",
+                description: "Parking spot is deactivated and cannot be reserved.");
+        }
     }
 }
