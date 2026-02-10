@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
@@ -19,20 +18,18 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureLayer(
         this IServiceCollection services,
-        IHostEnvironment environment,
         IConfiguration configuration)
     {
-        if (environment.IsDevelopment())
-        {
-            services.AddDbContext<ParkingManagementSystemDbContext>(options =>
-                options.UseInMemoryDatabase("parking-management-system"));
-        }
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        services.AddDbContext<ParkingManagementSystemDbContext>(options => options.UseSqlServer(connectionString));
 
         services.AddAuthentication(configuration);
 
         services.AddScoped<IParkingSpotsRepository, ParkingSpotsRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IReservationsRepository, ReservationsRepository>();
         services.AddScoped<IPasswordService, BCryptPasswordService>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

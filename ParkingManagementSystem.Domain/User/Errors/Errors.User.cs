@@ -11,5 +11,12 @@ public static class Errors
             return Error.Conflict(code: "UserAlreadyExists",
                 description: "User already exists with this email.");
         }
+
+        public static Error UserNotFound()
+        {
+            return Error.NotFound(
+                code: "UserNotFound",
+                description: "User not found.");
+        }
     }
 }

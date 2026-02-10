@@ -12,11 +12,14 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordService _passwordService;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public RegisterUserCommandHandler(IUserRepository userRepository, IPasswordService passwordService)
+    public RegisterUserCommandHandler(IUserRepository userRepository, IPasswordService passwordService,
+        IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
         _passwordService = passwordService;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<ErrorOr<User>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -40,6 +43,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
         );
 
         await _userRepository.AddAsync(newUser, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return newUser;
     }

@@ -1,9 +1,10 @@
 using ParkingManagementSystem.Domain.ParkingSpot;
-using ErrorOr;
 
 namespace ParkingManagementSystem.Application.Common.Persistence.Interfaces;
 
 public interface IParkingSpotsRepository
 {
     Task AddAsync(ParkingSpot parkingSpot, CancellationToken cancellationToken);
+    Task<ParkingSpot?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<List<ParkingSpot>> GetNotDeactivatedParkingSpotsAsync(CancellationToken cancellationToken);
 }
