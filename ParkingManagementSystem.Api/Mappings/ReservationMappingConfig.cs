@@ -10,6 +10,6 @@ public class ReservationMappingConfig : IRegister
     {
         config.NewConfig<ReserveParkingSpotRequest, ReserveParkingSpotCommand>()
             .Map(dest => dest.UserId, src => src.UserId)
-            .Map(dest => dest.Date, src => src.Date);
+            .Map(dest => dest.Dates, src => src.Dates);
     }
 }

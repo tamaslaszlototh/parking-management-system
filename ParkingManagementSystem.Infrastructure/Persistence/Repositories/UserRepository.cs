@@ -18,7 +18,6 @@ public class UserRepository : IUserRepository
     public async Task AddAsync(User user, CancellationToken cancellationToken)
     {
         await _dbContext.AddAsync(user, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<User?> GetByEmailAsync(Email email, CancellationToken cancellationToken)

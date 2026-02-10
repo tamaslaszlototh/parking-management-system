@@ -18,7 +18,7 @@ public class ReservationsController : ApiController
         _mediator = mediator;
     }
 
-    [HttpPost("reserveparkingspot")]
+    [HttpPost("reserveparkingspots")]
     public async Task<IActionResult> ReserveParkingSpot(ReserveParkingSpotRequest request)
     {
         var command = _mapper.Map<ReserveParkingSpotCommand>(request);

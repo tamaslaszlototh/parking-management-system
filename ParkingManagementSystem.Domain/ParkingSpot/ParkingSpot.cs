@@ -23,6 +23,10 @@ public sealed class ParkingSpot : AggregateRoot
         ManagerId = managerId;
     }
 
+    private ParkingSpot(Guid id) : base(id)
+    {
+    }
+
     public static ParkingSpot Create(
         ParkingSpotName name,
         ParkingSpotDescription description,

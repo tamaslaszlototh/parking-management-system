@@ -9,10 +9,12 @@ namespace ParkingManagementSystem.Application.AddParkingSpot.Commands;
 public class AddParkingSpotCommandHandler : IRequestHandler<AddParkingSpotCommand, ErrorOr<ParkingSpot>>
 {
     private readonly IParkingSpotsRepository _parkingSpotsRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public AddParkingSpotCommandHandler(IParkingSpotsRepository parkingSpotsRepository)
+    public AddParkingSpotCommandHandler(IParkingSpotsRepository parkingSpotsRepository, IUnitOfWork unitOfWork)
     {
         _parkingSpotsRepository = parkingSpotsRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<ErrorOr<ParkingSpot>> Handle(AddParkingSpotCommand request,
@@ -24,6 +26,7 @@ public class AddParkingSpotCommandHandler : IRequestHandler<AddParkingSpotComman
             request.State);
 
         await _parkingSpotsRepository.AddAsync(parkingSpot, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
         return parkingSpot;
     }
 }

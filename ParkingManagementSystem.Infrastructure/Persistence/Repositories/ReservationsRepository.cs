@@ -16,7 +16,6 @@ public class ReservationsRepository : IReservationsRepository
     public async Task AddAsync(Reservation reservation, CancellationToken cancellationToken)
     {
         await _dbContext.Reservations.AddAsync(reservation, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<bool> HasReservationForAsync(Guid userId, DateOnly date,

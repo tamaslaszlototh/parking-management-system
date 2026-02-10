@@ -12,3 +12,16 @@ Content-Type: application/json
   "role": 2
 }
 ###
+
+POST {{Host}}/api/users/register
+Content-Type: application/json
+
+{
+  "firstName": "Kate",
+  "lastName": "White",
+  "email": "kate.white@demo.com",
+  "phone": "+36112312312",
+  "password": "Secret/password123",
+  "role": 2
+}
+###

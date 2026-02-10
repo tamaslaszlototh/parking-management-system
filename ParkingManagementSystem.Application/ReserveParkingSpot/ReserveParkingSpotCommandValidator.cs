@@ -8,9 +8,10 @@ public class ReserveParkingSpotCommandValidator : AbstractValidator<ReserveParki
     {
         RuleFor(x => x.UserId)
             .NotEmpty().WithMessage("User Id is required");
-        
-        RuleFor(x => x.Date)
-            .NotEmpty().WithMessage("Date is required")
-            .Must(date => date >= DateOnly.FromDateTime(DateTime.Now)).WithMessage("Date cannot be in the past.");
+
+        RuleFor(x => x.Dates)
+            .NotEmpty().WithMessage("At least one date is required.")
+            .Must(dates => dates.All(d => d >= DateOnly.FromDateTime(DateTime.Now)))
+            .WithMessage("Dates cannot be in the past.");
     }
 }

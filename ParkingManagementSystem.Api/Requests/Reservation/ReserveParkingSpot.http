@@ -1,15 +1,33 @@
 @Host = http://localhost:5196
-@UserId = a0ffc8cf-43f9-4b88-951d-fffb95f86d2c
+@UserIdJohn = a0ffc8cf-43f9-4b88-951d-fffb95f86d2c
+@UserIdKate = bc9ff325-b950-49e2-b7b2-dfcf7eb87d70
 @ParkingSpotId = 07ed9261-e9d8-450a-8c3e-d070c00ed103
-@Date = 2026-02-11
-@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhMGZmYzhjZi00M2Y5LTRiODgtOTUxZC1mZmZiOTVmODZkMmMiLCJnaXZlbl9uYW1lIjoiSm9obiIsImVtYWlsIjoiam9obi5kb2VAZGVtby5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJQYXJraW5nQWRtaW5pc3RyYXRvciIsImp0aSI6IjJiNGRlM2U1LWE0ZDItNGZmYS1iMzY0LWI4OGMxZjc4M2UzNCIsImV4cCI6MTc3MDY0NzM2MiwiaXNzIjoiUGFya2luZyBNYW5hZ2VtZW50IFN5c3RlbSBTZXJ2ZXIiLCJhdWQiOiJQYXJraW5nIE1hbmFnZW1lbnQgU3lzdGVtIENsaWVudCJ9.JRlCXAwHIMH1rfD6noypSd-rTBbfsnRYlwkbpZNdk8A
+@Date1 = 2026-02-21
+@Date2 = 2026-02-22
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiYzlmZjMyNS1iOTUwLTQ5ZTItYjdiMi1kZmNmN2ViODdkNzAiLCJnaXZlbl9uYW1lIjoiS2F0ZSIsImVtYWlsIjoia2F0ZS53aGl0ZUBkZW1vLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlBhcmtpbmdBZG1pbmlzdHJhdG9yIiwianRpIjoiZDMzMjRjNzktMTVhYy00OWUxLThkY2UtNGQzNTk2NDJiMGE4IiwiZXhwIjoxNzcwNzQ0OTI3LCJpc3MiOiJQYXJraW5nIE1hbmFnZW1lbnQgU3lzdGVtIFNlcnZlciIsImF1ZCI6IlBhcmtpbmcgTWFuYWdlbWVudCBTeXN0ZW0gQ2xpZW50In0.GSwAKsPqEt3qf3jkNvLoEA-0zF_1hm8KCcqYHjN49dc
 
-POST {{Host}}/api/reservations/reserveparkingspot
+POST {{Host}}/api/reservations/reserveparkingspots
 Authorization: Bearer {{Token}}
 Content-Type: application/json
 
 {
-  "userId": "{{UserId}}",
-  "date": "{{Date}}"
+  "userId": "{{UserIdJohn}}",
+  "dates": [
+    "{{Date1}}",
+    "{{Date2}}"
+  ]
+}
+###
+
+POST {{Host}}/api/reservations/reserveparkingspots
+Authorization: Bearer {{Token}}
+Content-Type: application/json
+
+{
+  "userId": "{{UserIdKate}}",
+  "dates": [
+    "{{Date1}}",
+    "{{Date2}}"
+  ]
 }
 ###

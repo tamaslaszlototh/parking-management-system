@@ -17,7 +17,6 @@ public class ParkingSpotsRepository : IParkingSpotsRepository
     public async Task AddAsync(ParkingSpot parkingSpot, CancellationToken cancellationToken)
     {
         await _dbContext.AddAsync(parkingSpot, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<ParkingSpot?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

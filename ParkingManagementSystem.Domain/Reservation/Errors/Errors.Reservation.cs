@@ -6,18 +6,20 @@ public static class Errors
 {
     public static class Reservation
     {
-        public static Error NotFoundFreeParkingSpot(DateOnly date)
+        public static Error NotFoundFreeParkingSpotForDates(List<DateOnly> dates)
         {
             return Error.NotFound(
-                code: "NotFoundFreeParkingSpot",
-                description: $"No free parking spot found for date: {date}.");
+                code: "NotFoundFreeParkingSpotForDates",
+                description: "No free parking spot found for dates.",
+                metadata: new Dictionary<string, object> { { "Dates", dates } });
         }
 
-        public static Error UserAlreadyHasReservationForDate(DateOnly date)
+        public static Error UserAlreadyHasReservationForDates(List<DateOnly> dates)
         {
             return Error.Conflict(
-                code: "UserHasAlreadyReservationForDate",
-                description: $"User already has reservation for date: {date}.");
+                code: "UserAlreadyHasReservationForDates",
+                description: "User already has reservation for dates.",
+                metadata: new Dictionary<string, object> { { "Dates", dates } });
         }
     }
 }
