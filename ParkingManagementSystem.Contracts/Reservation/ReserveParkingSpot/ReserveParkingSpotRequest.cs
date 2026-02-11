@@ -1,3 +1,3 @@
 namespace ParkingManagementSystem.Contracts.Reservation.ReserveParkingSpot;
 
-public record ReserveParkingSpotRequest(Guid UserId, List<DateOnly> Dates);
+public record ReserveParkingSpotRequest(Guid UserId, List<DateOnly> Dates, bool PreferDedicatedParkingSpots = false);

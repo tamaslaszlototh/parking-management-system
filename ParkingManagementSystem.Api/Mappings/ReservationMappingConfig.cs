@@ -12,7 +12,8 @@ public class ReservationMappingConfig : IRegister
     {
         config.NewConfig<ReserveParkingSpotRequest, ReserveParkingSpotCommand>()
             .Map(dest => dest.UserId, src => src.UserId)
-            .Map(dest => dest.Dates, src => src.Dates);
+            .Map(dest => dest.Dates, src => src.Dates)
+            .Map(dest => dest.PreferDedicatedParkingSpots, src => src.PreferDedicatedParkingSpots);
 
         config.NewConfig<CancelReservationRequest, CancelReservationCommand>()
             .Map(dest => dest.ReservationIds, src => src.ReservationIds)
