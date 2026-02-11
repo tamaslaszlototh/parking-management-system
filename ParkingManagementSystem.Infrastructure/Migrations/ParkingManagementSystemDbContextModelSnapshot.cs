@@ -32,6 +32,9 @@ namespace ParkingManagementSystem.Infrastructure.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<Guid?>("ManagerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -72,6 +75,9 @@ namespace ParkingManagementSystem.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AssignedParkingSpotId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")

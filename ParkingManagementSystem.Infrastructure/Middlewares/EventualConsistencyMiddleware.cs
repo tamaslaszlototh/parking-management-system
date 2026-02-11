@@ -18,9 +18,10 @@ public class EventualConsistencyMiddleware
 
     public async Task InvokeAsync(HttpContext context, IPublisher publisher, IUnitOfWork unitOfWork)
     {
-        await unitOfWork.BeginTransactionAsync();
         context.Response.OnCompleted(async () =>
         {
+            await unitOfWork.BeginTransactionAsync();
+            
             try
             {
                 if (context.Items.TryGetValue(DomainEventsKey, out var value) &&

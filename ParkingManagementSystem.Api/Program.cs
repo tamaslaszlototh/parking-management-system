@@ -13,6 +13,7 @@ builder.Services
     .AddApplicationLayer()
     .AddDomainLayer()
     .AddInfrastructureLayer(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
 
 var config = TypeAdapterConfig.GlobalSettings;
 config.Scan(Assembly.GetExecutingAssembly());
