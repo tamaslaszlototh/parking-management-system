@@ -50,6 +50,8 @@
   - Business Rules
     - R11. Business manager is assigned a dedicated parking spot that is automatically reserved for all days of the current calendar year (Jan 1 - Dec 31).
     - R11c. If a business manager is assigned mid-year, their dedicated parking spot is automatically reserved from assignment date through December 31.
+    - R12. Business manager can cancel their automatic reservation.
+    - R13. When business manager cancels days, the dedicated parking spot becomes immediately available for employee reservation, subject to standard employee reservation rules.
 
 
 ## Invariants (In progress)
