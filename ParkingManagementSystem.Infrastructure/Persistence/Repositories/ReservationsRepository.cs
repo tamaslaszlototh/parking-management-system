@@ -38,4 +38,16 @@ public class ReservationsRepository : IReservationsRepository
             .Where(r => r.ReservationDate >= DateOnly.FromDateTime(DateTime.UtcNow) && r.UserId == userId)
             .ToListAsync(cancellationToken: cancellationToken);
     }
+
+    public async Task<List<Reservation>> GetReservationsByIdsAsync(List<Guid> reservationIds,
+        CancellationToken cancellationToken)
+    {
+        return await _dbContext.Reservations.Where(r => reservationIds.Contains(r.Id))
+            .ToListAsync(cancellationToken);
+    }
+
+    public void Remove(Reservation reservation)
+    {
+        _dbContext.Reservations.Remove(reservation);
+    }
 }
