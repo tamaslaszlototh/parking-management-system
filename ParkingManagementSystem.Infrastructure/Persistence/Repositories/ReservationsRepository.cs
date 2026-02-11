@@ -24,7 +24,7 @@ public class ReservationsRepository : IReservationsRepository
         return _dbContext.Reservations.Any(r => r.UserId == userId && r.ReservationDate == date);
     }
 
-    public async Task<List<Guid>> GetReservedParkingSpotsForDate(DateOnly date, CancellationToken cancellationToken)
+    public async Task<List<Guid>> GetReservedParkingSpotsForDateAsync(DateOnly date, CancellationToken cancellationToken)
     {
         return await _dbContext.Reservations
             .Where(r => r.ReservationDate == date)
