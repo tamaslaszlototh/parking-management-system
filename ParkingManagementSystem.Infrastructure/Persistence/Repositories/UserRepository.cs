@@ -25,8 +25,18 @@ public class UserRepository : IUserRepository
         return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
     }
 
+    public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+    }
+
     public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _dbContext.Users.AnyAsync(u => u.Id == id, cancellationToken);
+    }
+
+    public void Update(User user)
+    {
+        _dbContext.Update(user);
     }
 }

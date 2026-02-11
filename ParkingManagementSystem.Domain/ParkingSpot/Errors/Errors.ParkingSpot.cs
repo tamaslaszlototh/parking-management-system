@@ -26,5 +26,19 @@ public static class Errors
                 code: "ParkingSpotDeactivatedCannotBeReserved",
                 description: "Parking spot is deactivated and cannot be reserved.");
         }
+
+        public static Error ParkingSpotIsNotDedicated()
+        {
+            return Error.Forbidden(
+                code: "ParkingSpotIsNotDedicated",
+                description: "Parking spot is not dedicated.");
+        }
+
+        public static Error ParkingSpotIsAlreadyAssigned()
+        {
+            return Error.Conflict(
+                code: "ParkingSpotIsAlreadyAssigned",
+                description: "Parking spot is already assigned to a manager.");
+        }
     }
 }

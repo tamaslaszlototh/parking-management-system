@@ -1,5 +1,6 @@
 using ParkingManagementSystem.Domain.Common;
 using ParkingManagementSystem.Domain.User.Enums;
+using ParkingManagementSystem.Domain.User.Events;
 using ParkingManagementSystem.Domain.User.ValueObjects;
 
 namespace ParkingManagementSystem.Domain.User;
@@ -12,6 +13,7 @@ public sealed class User : AggregateRoot
     public Phone Phone { get; }
     public Password Password { get; }
     public UserRole Role { get; }
+    public Guid? AssignedParkingSpotId { get; private set; }
 
     private User(
         Guid id,
@@ -20,7 +22,8 @@ public sealed class User : AggregateRoot
         Email email,
         Phone phone,
         Password password,
-        UserRole role) : base(id)
+        UserRole role,
+        Guid? assignedParkingSpotId) : base(id)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -28,6 +31,7 @@ public sealed class User : AggregateRoot
         Phone = phone;
         Password = password;
         Role = role;
+        AssignedParkingSpotId = assignedParkingSpotId;
     }
 
     public static User Create(
@@ -37,7 +41,8 @@ public sealed class User : AggregateRoot
         Phone phone,
         Password password,
         UserRole role = UserRole.Employee,
-        Guid? id = null
+        Guid? id = null,
+        Guid? assignedParkingSpotId = null
     )
     {
         var userId = id ?? Guid.NewGuid();
@@ -49,6 +54,13 @@ public sealed class User : AggregateRoot
             email: email,
             phone: phone,
             password: password,
-            role: role);
+            role: role,
+            assignedParkingSpotId: assignedParkingSpotId);
+    }
+
+    public void AssignParkingSpot(Guid parkingSpotId)
+    {
+        AssignedParkingSpotId = parkingSpotId;
+        DomainEvents.Add(new ParkingSpotAssignedEvent(Id, parkingSpotId));
     }
 }

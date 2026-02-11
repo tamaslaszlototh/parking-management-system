@@ -9,7 +9,7 @@ public sealed class ParkingSpot : AggregateRoot
     public ParkingSpotName Name { get; }
     public ParkingSpotState State { get; }
     public ParkingSpotDescription Description { get; }
-    public Guid? ManagerId { get; }
+    public Guid? ManagerId { get; private set; }
 
     private ParkingSpot(
         Guid id,
@@ -42,5 +42,10 @@ public sealed class ParkingSpot : AggregateRoot
             state: state,
             description: description,
             managerId: managerId);
+    }
+    
+    public void AssignManager(Guid managerId)
+    {
+        ManagerId = managerId;
     }
 }

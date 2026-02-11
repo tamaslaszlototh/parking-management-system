@@ -1,0 +1,3 @@
+namespace ParkingManagementSystem.Contracts.ParkingSpot.AssignDedicatedParkingSpot;
+
+public record AssignDedicatedParkingSpotRequest(Guid ManagerId, Guid ParkingSpotId);

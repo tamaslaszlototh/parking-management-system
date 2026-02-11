@@ -54,7 +54,7 @@ public class CancelReservationCommandHandler : IRequestHandler<CancelReservation
             var cancelledDays = reservations.Select(r => r.ReservationDate).ToList();
             return cancelledDays;
         }
-        catch (Exception e)
+        catch
         {
             await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Error.Failure();

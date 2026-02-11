@@ -24,6 +24,10 @@
 - **Add Parking Spot**
   - Business Rules
     - R15. Parking administrator can add new parking spots to the parking spot inventory.
+- **Assign Dedicated Parking Spot**
+  - Business Rules
+    - R11a. Dedicated parking spot reservation is managed by parking administrator.
+    - R17. Parking administrator can assign dedicated spots to business manager.
 
 ### Employee
 - **Reserve Parking Spot**
@@ -42,7 +46,10 @@
     - R7. Cancellation releases parking spot immediately for other employees to reserve.
 
 ### Business manager
-
+- **Assign Dedicated Parking Spot**
+  - Business Rules
+    - R11. Business manager is assigned a dedicated parking spot that is automatically reserved for all days of the current calendar year (Jan 1 - Dec 31).
+    - R11c. If a business manager is assigned mid-year, their dedicated parking spot is automatically reserved from assignment date through December 31.
 
 
 ## Invariants (In progress)
@@ -59,6 +66,7 @@
   - ACTIVE: Available for reservations
   - DEACTIVATED: Not available for new reservations
   - DEDICATED: Assigned to a specific business manager
+- INV-SPOT-3: Dedicated Parking Spot Uniqueness
 
 ### Reservation
 - INV-RES-1: Valid Date Range
@@ -73,3 +81,7 @@
   - A parking spot is "available" for date D if and only if:
     - Parking Spot State = ACTIVE or DEDICATED
     - AND NOT EXISTS active reservation for that spot on date D
+
+### Business Manager
+- INV-MGR-1: Dedicated Spot Assignment
+- INV-MGR-3: Mid-Year Assignment Reservation
