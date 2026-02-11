@@ -31,4 +31,11 @@ public class ReservationsRepository : IReservationsRepository
             .Select(r => r.ParkingSpotId)
             .ToListAsync(cancellationToken: cancellationToken);
     }
+
+    public async Task<List<Reservation>> GetActiveReservationsAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Reservations
+            .Where(r => r.ReservationDate >= DateOnly.FromDateTime(DateTime.UtcNow) && r.UserId == userId)
+            .ToListAsync(cancellationToken: cancellationToken);
+    }
 }

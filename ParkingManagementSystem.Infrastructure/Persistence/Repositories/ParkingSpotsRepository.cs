@@ -29,4 +29,9 @@ public class ParkingSpotsRepository : IParkingSpotsRepository
         return await _dbContext.ParkingSpots.Where(p => p.State != ParkingSpotState.Deactivated)
             .ToListAsync(cancellationToken);
     }
+
+    public void Update(ParkingSpot parkingSpot)
+    {
+        _dbContext.Update(parkingSpot);
+    }
 }

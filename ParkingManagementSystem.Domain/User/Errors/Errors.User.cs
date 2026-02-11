@@ -18,5 +18,19 @@ public static class Errors
                 code: "UserNotFound",
                 description: "User not found.");
         }
+
+        public static Error ManagerNotFound()
+        {
+            return Error.NotFound(
+                code: "ManagerNotFound",
+                description: "Manager not found.");
+        }
+
+        public static Error ManagerIsAlreadyAssignedToParkingSpot()
+        {
+            return Error.NotFound(
+                code: "ManagerIsAlreadyAssignedToParkingSpot",
+                description: "Manager is already assigned to a parking spot.");
+        }
     }
 }
