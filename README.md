@@ -29,11 +29,17 @@
 - **Reserve Parking Spot**
   - Business Rules
     - R1. Employee can only reserve parking spots for full calendar days (12:00 AM - 11:59 PM).
+    - R1a. Employee can reserve future non-overlapping reservations while current reservations are active.
     - R2. Employee can reserve parking spots within a 14-day booking window (from today up to 14 days in the future).
     - R3. Employee can reserve parking spots for up to 14 consecutive days maximum per reservation.
     - R4. Employee can have only one active reservation on a day.
     - R9. System auto-assigns available parking spot for the reservation.
     - R10. System prevents reservation dates that overlap with employee's existing reservations.
+- **Cancel Reservation**
+  - Business Rules
+    - R5. Employee can cancel entire reservation at any time.
+    - R6. Employee can cancel individual days from a multi-day reservation.
+    - R7. Cancellation releases parking spot immediately for other employees to reserve.
 
 ### Business manager
 
@@ -60,6 +66,7 @@
   - Maximum 14 days
 - INV-RES-2: Assigned Parking Spot Validity
   - At reservation time, the parking spot must be in ACTIVE state (or DEDICATED if business manager cancelled for that day).
+- INV-RES-9: Immediate Availability Upon Cancellation
  
 ### System
 - INV-SYS-1: Parking Spot Availability Calculation
