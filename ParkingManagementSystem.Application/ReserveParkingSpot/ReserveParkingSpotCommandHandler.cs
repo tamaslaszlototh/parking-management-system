@@ -99,9 +99,10 @@ public class ReserveParkingSpotCommandHandler : IRequestHandler<ReserveParkingSp
         var reservedParkingSpotIds =
             await _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, cancellationToken);
 
-        return availableParkingSpots.FirstOrDefault(p => !reservedParkingSpotIds.Contains(p.Id)
-                                                         && (p.State != ParkingSpotState.Dedicated ||
-                                                             p.ManagerId == userId));
+        return availableParkingSpots.FirstOrDefault(p =>
+            !reservedParkingSpotIds.Contains(p.Id)
+            && (p.State == ParkingSpotState.Active
+                || (p.State == ParkingSpotState.Dedicated && p.ManagerId == userId)));
     }
 
     private async Task<(bool hasReservation, List<DateOnly> reservedDates)> CheckUserReservationsForDates(Guid userId,
