@@ -21,5 +21,12 @@ public static class Errors
                 description: "User already has reservation for dates.",
                 metadata: new Dictionary<string, object> { { "Dates", dates } });
         }
+
+        public static Error ReservationNotFound()
+        {
+            return Error.NotFound(
+                code: "ReservationNotFound",
+                description: "Reservation not found.");
+        }
     }
 }

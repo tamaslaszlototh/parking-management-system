@@ -1,7 +1,9 @@
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ParkingManagementSystem.Application.CancelReservation;
 using ParkingManagementSystem.Application.ReserveParkingSpot;
+using ParkingManagementSystem.Contracts.Reservation.CancelReservation;
 using ParkingManagementSystem.Contracts.Reservation.ReserveParkingSpot;
 
 namespace ParkingManagementSystem.Api.Controllers;
@@ -25,6 +27,16 @@ public class ReservationsController : ApiController
         var result = await _mediator.Send(command);
         return result.Match(
             _ => Ok(),
+            error => Problem(error));
+    }
+
+    [HttpPost("cancelreservation")]
+    public async Task<IActionResult> CancelReservation(CancelReservationRequest request)
+    {
+        var command = _mapper.Map<CancelReservationCommand>(request);
+        var result = await _mediator.Send(command);
+        return result.Match(
+            success => Ok(_mapper.Map<CancelReservationResponse>(success)),
             error => Problem(error));
     }
 }

@@ -24,11 +24,24 @@ public class ReservationsRepository : IReservationsRepository
         return _dbContext.Reservations.Any(r => r.UserId == userId && r.ReservationDate == date);
     }
 
-    public async Task<List<Guid>> GetReservedParkingSpotsForDate(DateOnly date, CancellationToken cancellationToken)
+    public async Task<List<Guid>> GetReservedParkingSpotsForDateAsync(DateOnly date,
+        CancellationToken cancellationToken)
     {
         return await _dbContext.Reservations
             .Where(r => r.ReservationDate == date)
             .Select(r => r.ParkingSpotId)
             .ToListAsync(cancellationToken: cancellationToken);
+    }
+
+    public async Task<List<Reservation>> GetReservationsByIdsAsync(List<Guid> reservationIds,
+        CancellationToken cancellationToken)
+    {
+        return await _dbContext.Reservations.Where(r => reservationIds.Contains(r.Id))
+            .ToListAsync(cancellationToken);
+    }
+
+    public void Remove(Reservation reservation)
+    {
+        _dbContext.Reservations.Remove(reservation);
     }
 }
