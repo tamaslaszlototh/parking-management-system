@@ -249,7 +249,7 @@ public class ReserveParkingSpotTests
         var command = new ReserveParkingSpotCommand(userId, dates);
 
         var dedicatedSpot = ParkingSpot.Create(ParkingSpotName.Create("A1"), ParkingSpotDescription.Create("A1"),
-            managerId: userId);
+            managerId: userId, state: ParkingSpotState.Dedicated);
         var parkingSpots = new List<ParkingSpot> { dedicatedSpot };
         var reservedParkingSpotIds = new List<Guid>();
 
@@ -358,7 +358,8 @@ public class ReserveParkingSpotTests
             .Returns(false);
         _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
             .Returns(parkingSpots);
-        _reservationsRepository.GetReservedParkingSpotsForDateAsync(Arg.Any<DateOnly>(), Arg.Any<CancellationToken>())
+        _reservationsRepository
+            .GetReservedParkingSpotsForDateAsync(Arg.Any<DateOnly>(), Arg.Any<CancellationToken>())
             .Returns(new List<Guid>());
 
         // Act
@@ -442,5 +443,225 @@ public class ReserveParkingSpotTests
         await _unitOfWork.Received(1).BeginTransactionAsync(Arg.Any<CancellationToken>());
         await _unitOfWork.DidNotReceive().SaveChangesAsync(Arg.Any<CancellationToken>());
         await _unitOfWork.DidNotReceive().CommitTransactionAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Handle_WhenPreferDedicatedSpotIsTrueAndDedicatedSpotAvailable_ShouldReserveDedicatedSpot()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var date = DateOnly.FromDateTime(DateTime.Now);
+        var dates = new List<DateOnly> { date };
+        var command = new ReserveParkingSpotCommand(userId, dates, PreferDedicatedParkingSpots: true);
+
+        var dedicatedSpot = ParkingSpot.Create(ParkingSpotName.Create("D1"),
+            ParkingSpotDescription.Create("Dedicated"),
+            managerId: userId, state: ParkingSpotState.Dedicated);
+        var activeSpot = ParkingSpot.Create(ParkingSpotName.Create("A1"), ParkingSpotDescription.Create("Active"));
+        var parkingSpots = new List<ParkingSpot> { activeSpot, dedicatedSpot };
+        var reservedParkingSpotIds = new List<Guid>();
+
+        _userRepository.ExistsAsync(userId, Arg.Any<CancellationToken>())
+            .Returns(true);
+        _reservationsRepository.HasReservationForAsync(userId, date, Arg.Any<CancellationToken>())
+            .Returns(false);
+        _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
+            .Returns(parkingSpots);
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, Arg.Any<CancellationToken>())
+            .Returns(reservedParkingSpotIds);
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.IsError.Should().BeFalse();
+
+        await _reservationsRepository.Received(1).AddAsync(
+            Arg.Is<Reservation>(r => r.ParkingSpotId == dedicatedSpot.Id),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Handle_WhenPreferDedicatedSpotIsTrueButDedicatedSpotReserved_ShouldReserveActiveSpot()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var date = DateOnly.FromDateTime(DateTime.Now);
+        var dates = new List<DateOnly> { date };
+        var command = new ReserveParkingSpotCommand(userId, dates, PreferDedicatedParkingSpots: true);
+
+        var dedicatedSpot = ParkingSpot.Create(ParkingSpotName.Create("D1"),
+            ParkingSpotDescription.Create("Dedicated"),
+            managerId: userId, state: ParkingSpotState.Dedicated);
+        var activeSpot = ParkingSpot.Create(ParkingSpotName.Create("A1"), ParkingSpotDescription.Create("Active"));
+        var parkingSpots = new List<ParkingSpot> { activeSpot, dedicatedSpot };
+        var reservedParkingSpotIds = new List<Guid> { dedicatedSpot.Id }; // Dedicated spot is reserved
+
+        _userRepository.ExistsAsync(userId, Arg.Any<CancellationToken>())
+            .Returns(true);
+        _reservationsRepository.HasReservationForAsync(userId, date, Arg.Any<CancellationToken>())
+            .Returns(false);
+        _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
+            .Returns(parkingSpots);
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, Arg.Any<CancellationToken>())
+            .Returns(reservedParkingSpotIds);
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.IsError.Should().BeFalse();
+
+        await _reservationsRepository.Received(1).AddAsync(
+            Arg.Is<Reservation>(r => r.ParkingSpotId == activeSpot.Id),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Handle_WhenPreferDedicatedSpotIsTrueButUserHasNoDedicatedSpot_ShouldReserveActiveSpot()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var otherManagerId = Guid.NewGuid();
+        var date = DateOnly.FromDateTime(DateTime.Now);
+        var dates = new List<DateOnly> { date };
+        var command = new ReserveParkingSpotCommand(userId, dates, PreferDedicatedParkingSpots: true);
+
+        var dedicatedSpotForOther = ParkingSpot.Create(ParkingSpotName.Create("D1"),
+            ParkingSpotDescription.Create("Dedicated"),
+            managerId: otherManagerId, state: ParkingSpotState.Dedicated);
+        var activeSpot = ParkingSpot.Create(ParkingSpotName.Create("A1"), ParkingSpotDescription.Create("Active"));
+        var parkingSpots = new List<ParkingSpot> { activeSpot, dedicatedSpotForOther };
+        var reservedParkingSpotIds = new List<Guid>();
+
+        _userRepository.ExistsAsync(userId, Arg.Any<CancellationToken>())
+            .Returns(true);
+        _reservationsRepository.HasReservationForAsync(userId, date, Arg.Any<CancellationToken>())
+            .Returns(false);
+        _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
+            .Returns(parkingSpots);
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, Arg.Any<CancellationToken>())
+            .Returns(reservedParkingSpotIds);
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.IsError.Should().BeFalse();
+
+        await _reservationsRepository.Received(1).AddAsync(
+            Arg.Is<Reservation>(r => r.ParkingSpotId == activeSpot.Id),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Handle_WhenPreferDedicatedSpotIsFalse_ShouldReserveFirstAvailableSpot()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var date = DateOnly.FromDateTime(DateTime.Now);
+        var dates = new List<DateOnly> { date };
+        var command = new ReserveParkingSpotCommand(userId, dates, PreferDedicatedParkingSpots: false);
+
+        var activeSpot = ParkingSpot.Create(ParkingSpotName.Create("A1"), ParkingSpotDescription.Create("Active"));
+        var dedicatedSpot = ParkingSpot.Create(ParkingSpotName.Create("D1"),
+            ParkingSpotDescription.Create("Dedicated"),
+            managerId: userId, state: ParkingSpotState.Dedicated);
+        var parkingSpots = new List<ParkingSpot> { activeSpot, dedicatedSpot };
+        var reservedParkingSpotIds = new List<Guid>();
+
+        _userRepository.ExistsAsync(userId, Arg.Any<CancellationToken>())
+            .Returns(true);
+        _reservationsRepository.HasReservationForAsync(userId, date, Arg.Any<CancellationToken>())
+            .Returns(false);
+        _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
+            .Returns(parkingSpots);
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, Arg.Any<CancellationToken>())
+            .Returns(reservedParkingSpotIds);
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.IsError.Should().BeFalse();
+
+        // Should reserve the first available (active spot in this case)
+        await _reservationsRepository.Received(1).AddAsync(
+            Arg.Is<Reservation>(r => r.ParkingSpotId == activeSpot.Id),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Handle_WhenPreferDedicatedSpotIsTrueForMultipleDates_ShouldPreferDedicatedForAllDates()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var date1 = DateOnly.FromDateTime(DateTime.Now);
+        var date2 = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
+        var dates = new List<DateOnly> { date1, date2 };
+        var command = new ReserveParkingSpotCommand(userId, dates, PreferDedicatedParkingSpots: true);
+
+        var dedicatedSpot = ParkingSpot.Create(ParkingSpotName.Create("D1"),
+            ParkingSpotDescription.Create("Dedicated"),
+            managerId: userId, state: ParkingSpotState.Dedicated);
+        var activeSpot = ParkingSpot.Create(ParkingSpotName.Create("A1"), ParkingSpotDescription.Create("Active"));
+        var parkingSpots = new List<ParkingSpot> { activeSpot, dedicatedSpot };
+
+        _userRepository.ExistsAsync(userId, Arg.Any<CancellationToken>())
+            .Returns(true);
+        _reservationsRepository.HasReservationForAsync(userId, Arg.Any<DateOnly>(), Arg.Any<CancellationToken>())
+            .Returns(false);
+        _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
+            .Returns(parkingSpots);
+        _reservationsRepository
+            .GetReservedParkingSpotsForDateAsync(Arg.Any<DateOnly>(), Arg.Any<CancellationToken>())
+            .Returns(new List<Guid>());
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.IsError.Should().BeFalse();
+
+        // Should reserve dedicated spot for both dates
+        await _reservationsRepository.Received(2).AddAsync(
+            Arg.Is<Reservation>(r => r.ParkingSpotId == dedicatedSpot.Id),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Handle_WhenDeactivatedSpotsExist_ShouldSkipDeactivatedSpots()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var date = DateOnly.FromDateTime(DateTime.Now);
+        var dates = new List<DateOnly> { date };
+        var command = new ReserveParkingSpotCommand(userId, dates);
+
+        var deactivatedSpot = ParkingSpot.Create(ParkingSpotName.Create("D1"),
+            ParkingSpotDescription.Create("Deactivated"),
+            state: ParkingSpotState.Deactivated);
+        var activeSpot = ParkingSpot.Create(ParkingSpotName.Create("A1"), ParkingSpotDescription.Create("Active"));
+        var parkingSpots = new List<ParkingSpot> { deactivatedSpot, activeSpot };
+        var reservedParkingSpotIds = new List<Guid>();
+
+        _userRepository.ExistsAsync(userId, Arg.Any<CancellationToken>())
+            .Returns(true);
+        _reservationsRepository.HasReservationForAsync(userId, date, Arg.Any<CancellationToken>())
+            .Returns(false);
+        _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
+            .Returns(parkingSpots);
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, Arg.Any<CancellationToken>())
+            .Returns(reservedParkingSpotIds);
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.IsError.Should().BeFalse();
+
+        await _reservationsRepository.Received(1).AddAsync(
+            Arg.Is<Reservation>(r => r.ParkingSpotId == activeSpot.Id),
+            Arg.Any<CancellationToken>());
     }
 }

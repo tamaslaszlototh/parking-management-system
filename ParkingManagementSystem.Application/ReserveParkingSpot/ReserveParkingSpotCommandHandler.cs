@@ -45,7 +45,8 @@ public class ReserveParkingSpotCommandHandler : IRequestHandler<ReserveParkingSp
                 return Errors.Reservation.UserAlreadyHasReservationForDates(reservationCheckResult.reservedDates);
             }
 
-            var freeParkingSpotResult = await FindFreeParkingSpots(request.Dates, request.UserId, cancellationToken);
+            var freeParkingSpotResult = await FindFreeParkingSpots(request.Dates, request.UserId,
+                request.PreferDedicatedParkingSpots, cancellationToken);
 
             if (freeParkingSpotResult.Count != request.Dates.Count)
             {
@@ -77,12 +78,13 @@ public class ReserveParkingSpotCommandHandler : IRequestHandler<ReserveParkingSp
     }
 
     private async Task<List<(ParkingSpot, DateOnly)>> FindFreeParkingSpots(List<DateOnly> dates, Guid userId,
-        CancellationToken cancellationToken)
+        bool preferDedicatedParkingSpots, CancellationToken cancellationToken)
     {
         List<(ParkingSpot, DateOnly)> freeParkingSpots = [];
         foreach (var date in dates)
         {
-            var freeParkingSpot = await FindFreeParkingSpot(date, userId, cancellationToken);
+            var freeParkingSpot =
+                await FindFreeParkingSpot(date, userId, preferDedicatedParkingSpots, cancellationToken);
             if (freeParkingSpot != null)
             {
                 freeParkingSpots.Add((freeParkingSpot, date));
@@ -92,17 +94,25 @@ public class ReserveParkingSpotCommandHandler : IRequestHandler<ReserveParkingSp
         return freeParkingSpots;
     }
 
-    private async Task<ParkingSpot?> FindFreeParkingSpot(DateOnly date, Guid userId,
+    private async Task<ParkingSpot?> FindFreeParkingSpot(DateOnly date, Guid userId, bool preferDedicatedParkingSpots,
         CancellationToken cancellationToken)
     {
         var availableParkingSpots = await _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(cancellationToken);
         var reservedParkingSpotIds =
             await _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, cancellationToken);
 
-        return availableParkingSpots.FirstOrDefault(p =>
-            !reservedParkingSpotIds.Contains(p.Id)
-            && (p.State == ParkingSpotState.Active
-                || (p.State == ParkingSpotState.Dedicated && p.ManagerId == userId)));
+        if (preferDedicatedParkingSpots)
+        {
+            var freeDedicatedParkingSpot = availableParkingSpots.FirstOrDefault(p =>
+                p.ManagerId == userId
+                && p.State != ParkingSpotState.Deactivated
+                && !reservedParkingSpotIds.Contains(p.Id));
+
+            return freeDedicatedParkingSpot ??
+                   GetFirstFreeParkingSpot(availableParkingSpots, reservedParkingSpotIds, userId);
+        }
+
+        return GetFirstFreeParkingSpot(availableParkingSpots, reservedParkingSpotIds, userId);
     }
 
     private async Task<(bool hasReservation, List<DateOnly> reservedDates)> CheckUserReservationsForDates(Guid userId,
@@ -122,5 +132,14 @@ public class ReserveParkingSpotCommandHandler : IRequestHandler<ReserveParkingSp
         }
 
         return (reservedDates.Count > 0, reservedDates);
+    }
+
+    private ParkingSpot? GetFirstFreeParkingSpot(List<ParkingSpot> availableParkingSpots,
+        List<Guid> reservedParkingSpotIds, Guid userId)
+    {
+        return availableParkingSpots.FirstOrDefault(p =>
+            !reservedParkingSpotIds.Contains(p.Id)
+            && (p.State == ParkingSpotState.Active
+                || (p.State == ParkingSpotState.Dedicated && p.ManagerId == userId)));
     }
 }

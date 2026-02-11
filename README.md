@@ -52,6 +52,11 @@
     - R11c. If a business manager is assigned mid-year, their dedicated parking spot is automatically reserved from assignment date through December 31.
     - R12. Business manager can cancel their automatic reservation.
     - R13. When business manager cancels days, the dedicated parking spot becomes immediately available for employee reservation, subject to standard employee reservation rules.
+- **Reserve Parking Spot**
+  - Business Rules
+    - R14. Once an employee reserves a business manager's cancelled parking spot, the manager cannot reclaim it.
+    - R14a. If no employee has reserved on a cancelled day, the manager can restore their automatic reservation for that day.
+    - R14b. If the manager wishes to park but cannot restore their spot, they must reserve a non-dedicated spot following employee rules.
 
 
 ## Invariants (In progress)
@@ -87,3 +92,5 @@
 ### Business Manager
 - INV-MGR-1: Dedicated Spot Assignment
 - INV-MGR-3: Mid-Year Assignment Reservation
+- INV-MGR-4: Cannot Reclaim Employee-Reserved Days
+- INV-MGR-5: Non-Dedicated Parking Spot Reservations Follow Employee Rules
