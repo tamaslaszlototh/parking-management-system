@@ -107,7 +107,7 @@ public class ReserveParkingSpotTests
             .Returns(false);
         _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
             .Returns(parkingSpots);
-        _reservationsRepository.GetReservedParkingSpotsForDate(date, Arg.Any<CancellationToken>())
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, Arg.Any<CancellationToken>())
             .Returns(reservedParkingSpotIds);
 
         // Act
@@ -141,7 +141,7 @@ public class ReserveParkingSpotTests
             .Returns(false);
         _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
             .Returns(parkingSpots);
-        _reservationsRepository.GetReservedParkingSpotsForDate(date, Arg.Any<CancellationToken>())
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, Arg.Any<CancellationToken>())
             .Returns(reservedParkingSpotIds);
 
         // Act
@@ -183,7 +183,7 @@ public class ReserveParkingSpotTests
             .Returns(false);
         _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
             .Returns(parkingSpots);
-        _reservationsRepository.GetReservedParkingSpotsForDate(date, Arg.Any<CancellationToken>())
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, Arg.Any<CancellationToken>())
             .Returns(reservedParkingSpotIds);
 
         // Act
@@ -222,7 +222,7 @@ public class ReserveParkingSpotTests
             .Returns(false);
         _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
             .Returns(parkingSpots);
-        _reservationsRepository.GetReservedParkingSpotsForDate(date, Arg.Any<CancellationToken>())
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, Arg.Any<CancellationToken>())
             .Returns(reservedParkingSpotIds);
 
         // Act
@@ -259,7 +259,7 @@ public class ReserveParkingSpotTests
             .Returns(false);
         _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
             .Returns(parkingSpots);
-        _reservationsRepository.GetReservedParkingSpotsForDate(date, Arg.Any<CancellationToken>())
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, Arg.Any<CancellationToken>())
             .Returns(reservedParkingSpotIds);
 
         // Act
@@ -299,7 +299,7 @@ public class ReserveParkingSpotTests
             .Returns(false);
         _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
             .Returns(parkingSpots);
-        _reservationsRepository.GetReservedParkingSpotsForDate(date, Arg.Any<CancellationToken>())
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date, Arg.Any<CancellationToken>())
             .Returns(reservedParkingSpotIds);
 
         // Act
@@ -358,7 +358,7 @@ public class ReserveParkingSpotTests
             .Returns(false);
         _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(Arg.Any<CancellationToken>())
             .Returns(parkingSpots);
-        _reservationsRepository.GetReservedParkingSpotsForDate(Arg.Any<DateOnly>(), Arg.Any<CancellationToken>())
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(Arg.Any<DateOnly>(), Arg.Any<CancellationToken>())
             .Returns(new List<Guid>());
 
         // Act
@@ -397,7 +397,7 @@ public class ReserveParkingSpotTests
 
         // Assert
         result.IsError.Should().BeTrue();
-        result.FirstError.Code.Should().Be("UserHasAlreadyReservationForDates");
+        result.FirstError.Code.Should().Be("UserAlreadyHasReservationForDates");
 
         await _unitOfWork.Received(1).BeginTransactionAsync(Arg.Any<CancellationToken>());
         await _parkingSpotsRepository.DidNotReceive()
@@ -427,9 +427,9 @@ public class ReserveParkingSpotTests
             .Returns(parkingSpots);
 
         // First date has free spot, second date is fully booked
-        _reservationsRepository.GetReservedParkingSpotsForDate(date1, Arg.Any<CancellationToken>())
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date1, Arg.Any<CancellationToken>())
             .Returns(new List<Guid>());
-        _reservationsRepository.GetReservedParkingSpotsForDate(date2, Arg.Any<CancellationToken>())
+        _reservationsRepository.GetReservedParkingSpotsForDateAsync(date2, Arg.Any<CancellationToken>())
             .Returns(new List<Guid> { parkingSpot.Id });
 
         // Act
