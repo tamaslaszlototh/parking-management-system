@@ -1,6 +1,7 @@
 using ParkingManagementSystem.Domain.ParkingSpot.Enums;
 using ParkingManagementSystem.Domain.ParkingSpot.ValueObjects;
 using ParkingManagementSystem.Domain.Common;
+using ParkingManagementSystem.Domain.ParkingSpot.Events;
 
 namespace ParkingManagementSystem.Domain.ParkingSpot;
 
@@ -43,10 +44,18 @@ public sealed class ParkingSpot : AggregateRoot
             description: description,
             managerId: managerId);
     }
-    
+
     public void AssignManager(Guid managerId)
     {
         ManagerId = managerId;
+    }
+
+    public void RemoveManagerAssignment()
+    {
+        if (ManagerId == null) return;
+
+        ManagerId = null;
+        DomainEvents.Add(new DedicatedParkingSpotAssignmentRemoved(Id));
     }
 
     public void Deactivate()

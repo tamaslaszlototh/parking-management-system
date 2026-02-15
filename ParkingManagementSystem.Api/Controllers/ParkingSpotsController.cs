@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using ParkingManagementSystem.Application.AddParkingSpot.Commands;
 using ParkingManagementSystem.Application.AssignDedicatedParkingSpot;
 using ParkingManagementSystem.Application.DeactivateParkingSpot.Commands;
+using ParkingManagementSystem.Application.RemoveDedicatedParkingSpotAssignment;
 using ParkingManagementSystem.Contracts.ParkingSpot.AddParkingSpot;
 using ParkingManagementSystem.Contracts.ParkingSpot.AssignDedicatedParkingSpot;
 using ParkingManagementSystem.Contracts.ParkingSpot.DeactivateParkingSpot;
@@ -52,6 +53,16 @@ public class ParkingSpotsController : ApiController
 
         return result.Match(
             success => Ok(_mapper.Map<DeactivateParkingSpotResponse>(success)),
+            errors => Problem(errors));
+    }
+
+    [HttpPatch("{id:guid}/remove-assignment")]
+    public async Task<IActionResult> RemoveDedicatedParkingSpotAssignment(Guid id)
+    {
+        var command = new RemoveDedicatedParkingSpotAssignmentCommand(id);
+        var result = await _mediator.Send(command);
+        return result.Match(
+            _ => Ok(),
             errors => Problem(errors));
     }
 }

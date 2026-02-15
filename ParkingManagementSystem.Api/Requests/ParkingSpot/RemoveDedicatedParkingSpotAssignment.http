@@ -1,0 +1,9 @@
+@Host = http://localhost:5196
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhMGZmYzhjZi00M2Y5LTRiODgtOTUxZC1mZmZiOTVmODZkMmMiLCJnaXZlbl9uYW1lIjoiSm9obiIsImVtYWlsIjoiam9obi5kb2VAZGVtby5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJQYXJraW5nQWRtaW5pc3RyYXRvciIsImp0aSI6ImY2MWIzOWVmLWQ0ODItNGU5Ny1iY2YxLTBiZWNkMGExNjQwYSIsImV4cCI6MTc3MTE5NjIwMCwiaXNzIjoiUGFya2luZyBNYW5hZ2VtZW50IFN5c3RlbSBTZXJ2ZXIiLCJhdWQiOiJQYXJraW5nIE1hbmFnZW1lbnQgU3lzdGVtIENsaWVudCJ9.XqPNfHyqzdKTcVEVudFLhPQfZzFZzcbd0r-zn8D0zqo
+@ParkingSpotId = ae825a0d-35f4-467c-bcd6-da3157389f42
+
+PATCH {{Host}}/api/parkingspots/{{ParkingSpotId}}/remove-assignment
+Content-Type: application/json
+Authorization: Bearer {{Token}}
+
+###
