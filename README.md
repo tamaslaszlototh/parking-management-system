@@ -28,6 +28,9 @@
   - Business Rules
     - R11a. Dedicated parking spot reservation is managed by parking administrator.
     - R17. Parking administrator can assign dedicated spots to business manager.
+- **Deactivate Parking Spot**
+  - Business Rules
+    - R16. Parking administrator can deactivate parking spots (for maintenance or permanent removal).
 
 ### Employee
 - **Reserve Parking Spot**

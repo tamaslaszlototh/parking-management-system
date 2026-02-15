@@ -1,8 +1,10 @@
 using Mapster;
 using ParkingManagementSystem.Application.AddParkingSpot.Commands;
 using ParkingManagementSystem.Application.AssignDedicatedParkingSpot;
+using ParkingManagementSystem.Application.DeactivateParkingSpot.Models;
 using ParkingManagementSystem.Contracts.ParkingSpot.AddParkingSpot;
 using ParkingManagementSystem.Contracts.ParkingSpot.AssignDedicatedParkingSpot;
+using ParkingManagementSystem.Contracts.ParkingSpot.DeactivateParkingSpot;
 using ParkingManagementSystem.Domain.ParkingSpot;
 
 namespace ParkingManagementSystem.Api.Mappings;
@@ -25,5 +27,9 @@ public class ParkingSpotMappingConfig : IRegister
         config.NewConfig<AssignDedicatedParkingSpotRequest, AssignDedicatedParkingSpotCommand>()
             .Map(dest => dest.ManagerId, src => src.ManagerId)
             .Map(dest => dest.ParkingSpotId, src => src.ParkingSpotId);
+
+        config.NewConfig<DeactivateParkingSpotCommandResult, DeactivateParkingSpotResponse>()
+            .Map(dest => dest.ReservationIds, src => src.ReservationIds)
+            .Map(dest => dest.LastReservedDate, src => src.LastReservedDate);
     }
 }

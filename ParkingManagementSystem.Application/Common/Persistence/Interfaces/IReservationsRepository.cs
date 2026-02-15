@@ -9,5 +9,7 @@ public interface IReservationsRepository
     Task<List<Guid>> GetReservedParkingSpotsForDateAsync(DateOnly date, CancellationToken cancellationToken);
     Task<List<Reservation>> GetActiveReservationsAsync(Guid userId, CancellationToken cancellationToken);
     Task<List<Reservation>> GetReservationsByIdsAsync(List<Guid> reservationIds, CancellationToken cancellationToken);
+    Task<List<Reservation>> GetReservationsForParkingSpotFromTodayAsync(Guid parkingSpotId,
+        CancellationToken cancellationToken);
     void Remove(Reservation reservation);
 }
