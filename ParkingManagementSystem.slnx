@@ -8,6 +8,5 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="ParkingManagementSystem.Application.UnitTests/ParkingManagementSystem.Application.UnitTests.csproj" />
-    <Project Path="ParkingManagementSystem.Domain.UnitTests/ParkingManagementSystem.Domain.UnitTests.csproj" />
   </Folder>
 </Solution>
