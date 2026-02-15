@@ -31,6 +31,9 @@
 - **Deactivate Parking Spot**
   - Business Rules
     - R16. Parking administrator can deactivate parking spots (for maintenance or permanent removal).
+- **Remove Dedicated Parking Spot Assignment**
+  - Business Rules
+    - R18. Parking administrator can remove dedicated spot assignments from business managers.
 
 ### Employee
 - **Reserve Parking Spot**
@@ -77,6 +80,7 @@
   - DEACTIVATED: Not available for new reservations
   - DEDICATED: Assigned to a specific business manager
 - INV-SPOT-3: Dedicated Parking Spot Uniqueness
+- INV-SPOT-4: Deactivated Parking Spot Constraint
 
 ### Reservation
 - INV-RES-1: Valid Date Range
@@ -97,3 +101,6 @@
 - INV-MGR-3: Mid-Year Assignment Reservation
 - INV-MGR-4: Cannot Reclaim Employee-Reserved Days
 - INV-MGR-5: Non-Dedicated Parking Spot Reservations Follow Employee Rules
+
+### Parking Administrator
+- INV-ADM-2: Dedicated Parking Spot Assignment Authority
