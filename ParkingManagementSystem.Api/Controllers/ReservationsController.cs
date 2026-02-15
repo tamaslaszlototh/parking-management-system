@@ -20,7 +20,7 @@ public class ReservationsController : ApiController
         _mediator = mediator;
     }
 
-    [HttpPost("reserveparkingspots")]
+    [HttpPost("reserve-parking-spots")]
     public async Task<IActionResult> ReserveParkingSpot(ReserveParkingSpotRequest request)
     {
         var command = _mapper.Map<ReserveParkingSpotCommand>(request);
@@ -30,7 +30,7 @@ public class ReservationsController : ApiController
             error => Problem(error));
     }
 
-    [HttpPost("cancelreservation")]
+    [HttpPost("cancel-reservation")]
     public async Task<IActionResult> CancelReservation(CancelReservationRequest request)
     {
         var command = _mapper.Map<CancelReservationCommand>(request);

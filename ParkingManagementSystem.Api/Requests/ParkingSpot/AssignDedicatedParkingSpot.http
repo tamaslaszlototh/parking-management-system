@@ -3,7 +3,7 @@
 @ParkingSpotId = ae825a0d-35f4-467c-bcd6-da3157389f42
 @ManagerId = bc9ff325-b950-49e2-b7b2-dfcf7eb87d70
 
-POST {{Host}}/api/parkingspots/assigndedicatedparkingspot
+POST {{Host}}/api/parkingspots/assign-dedicated-parking-spot
 Content-Type: application/json
 Authorization: Bearer {{Token}}
 

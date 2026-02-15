@@ -25,7 +25,7 @@ public class ParkingSpotsController : ApiController
         _mediator = mediator;
     }
 
-    [HttpPost("addparkingspot")]
+    [HttpPost("add-parking-spot")]
     public async Task<IActionResult> AddParkingSpot(AddParkingSpotRequest request)
     {
         var command = _mapper.Map<AddParkingSpotCommand>(request);
@@ -35,7 +35,7 @@ public class ParkingSpotsController : ApiController
             error => Problem(error));
     }
 
-    [HttpPost("assigndedicatedparkingspot")]
+    [HttpPost("assign-dedicated-parking-spot")]
     public async Task<IActionResult> AssignDedicatedParkingSpot(AssignDedicatedParkingSpotRequest request)
     {
         var command = _mapper.Map<AssignDedicatedParkingSpotCommand>(request);

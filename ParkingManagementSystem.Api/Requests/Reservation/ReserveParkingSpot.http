@@ -6,7 +6,7 @@
 @Date2 = 2026-02-24
 @Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiYzlmZjMyNS1iOTUwLTQ5ZTItYjdiMi1kZmNmN2ViODdkNzAiLCJnaXZlbl9uYW1lIjoiS2F0ZSIsImVtYWlsIjoia2F0ZS53aGl0ZUBkZW1vLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlBhcmtpbmdBZG1pbmlzdHJhdG9yIiwianRpIjoiN2RmYzA1YWQtNDA1Mi00OTBlLTgzN2QtOGYxZTA1YjZhNmZmIiwiZXhwIjoxNzcwODAxNjI4LCJpc3MiOiJQYXJraW5nIE1hbmFnZW1lbnQgU3lzdGVtIFNlcnZlciIsImF1ZCI6IlBhcmtpbmcgTWFuYWdlbWVudCBTeXN0ZW0gQ2xpZW50In0.mAv0WdQdG43_489eEK8TscWr2s2YV-BMOd6LrWzPBQ0
 
-POST {{Host}}/api/reservations/reserveparkingspots
+POST {{Host}}/api/reservations/reserve-parkingspots
 Authorization: Bearer {{Token}}
 Content-Type: application/json
 
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 ###
 
-POST {{Host}}/api/reservations/reserveparkingspots
+POST {{Host}}/api/reservations/reserve-parkingspots
 Authorization: Bearer {{Token}}
 Content-Type: application/json
 

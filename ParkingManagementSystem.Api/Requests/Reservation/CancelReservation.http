@@ -3,7 +3,7 @@
 @UserIdKate = bc9ff325-b950-49e2-b7b2-dfcf7eb87d70
 @Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhMGZmYzhjZi00M2Y5LTRiODgtOTUxZC1mZmZiOTVmODZkMmMiLCJnaXZlbl9uYW1lIjoiSm9obiIsImVtYWlsIjoiam9obi5kb2VAZGVtby5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJQYXJraW5nQWRtaW5pc3RyYXRvciIsImp0aSI6IjFhMGE5ZTAyLTFhNWItNGUxNy1hNTFmLTM1NTBkNTVhZTExZCIsImV4cCI6MTc3MDgwMTQ2MSwiaXNzIjoiUGFya2luZyBNYW5hZ2VtZW50IFN5c3RlbSBTZXJ2ZXIiLCJhdWQiOiJQYXJraW5nIE1hbmFnZW1lbnQgU3lzdGVtIENsaWVudCJ9.gPKfs3j6RQ18eJIbHMx18fTEHKoVF9lNK0MpxccW6Pk
 
-POST {{Host}}/api/reservations/cancelreservation
+POST {{Host}}/api/reservations/cancel-reservation
 Authorization: Bearer {{Token}}
 Content-Type: application/json
 
@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 ###
 
-POST {{Host}}/api/reservations/cancelreservation
+POST {{Host}}/api/reservations/cancel-reservation
 Authorization: Bearer {{Token}}
 Content-Type: application/json
 
