@@ -7,7 +7,7 @@ namespace ParkingManagementSystem.Domain.ParkingSpot;
 public sealed class ParkingSpot : AggregateRoot
 {
     public ParkingSpotName Name { get; }
-    public ParkingSpotState State { get; }
+    public ParkingSpotState State { get; private set; }
     public ParkingSpotDescription Description { get; }
     public Guid? ManagerId { get; private set; }
 
@@ -47,5 +47,10 @@ public sealed class ParkingSpot : AggregateRoot
     public void AssignManager(Guid managerId)
     {
         ManagerId = managerId;
+    }
+
+    public void Deactivate()
+    {
+        State = ParkingSpotState.Deactivated;
     }
 }

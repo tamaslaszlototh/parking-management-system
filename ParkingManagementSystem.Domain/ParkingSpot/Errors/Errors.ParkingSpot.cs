@@ -40,5 +40,12 @@ public static class Errors
                 code: "ParkingSpotIsAlreadyAssigned",
                 description: "Parking spot is already assigned to a manager.");
         }
+        
+        public static Error ParkingSpotIsAlreadyDeactivated()
+        {
+            return Error.Conflict(
+                code: "ParkingSpotIsAlreadyDeactivated",
+                description: "Parking spot is already deactivated.");
+        }
     }
 }
