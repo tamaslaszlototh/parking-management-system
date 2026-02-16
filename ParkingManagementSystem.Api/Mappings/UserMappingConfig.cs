@@ -1,5 +1,6 @@
 using Mapster;
 using ParkingManagementSystem.Application.LoginUser;
+using ParkingManagementSystem.Application.LoginUser.Models;
 using ParkingManagementSystem.Application.RegisterUser.Commands;
 using ParkingManagementSystem.Contracts.User.LoginUser;
 using ParkingManagementSystem.Contracts.User.RegisterUser;
@@ -30,5 +31,13 @@ public class UserMappingConfig : IRegister
         config.NewConfig<LoginUserRequest, LoginUserCommand>()
             .Map(dest => dest.Email, src => src.Email)
             .Map(dest => dest.Password, src => src.Password);
+
+        config.NewConfig<LoginUserResult, LoginUserResponse>()
+            .Map(dest => dest.Token, src => src.Token)
+            .Map(dest => dest.UserId, src => src.User.Id)
+            .Map(dest => dest.FirstName, src => src.User.FirstName.Value)
+            .Map(dest => dest.LastName, src => src.User.LastName.Value)
+            .Map(dest => dest.Email, src => src.User.Email)
+            .Map(dest => dest.Roles, src => src.User.Role);
     }
 }

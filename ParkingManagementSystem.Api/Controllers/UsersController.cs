@@ -39,7 +39,7 @@ public class UsersController : ApiController
         var command = _mapper.Map<LoginUserCommand>(request);
         var result = await _mediator.Send(command);
         return result.Match(
-            token => Ok(new LoginUserResponse(token)),
+            success => Ok(_mapper.Map<LoginUserResponse>(success)),
             error => Problem(error));
     }
 }

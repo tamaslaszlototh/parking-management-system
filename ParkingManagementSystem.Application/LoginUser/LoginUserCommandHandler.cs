@@ -2,11 +2,12 @@ using ErrorOr;
 using MediatR;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
 using ParkingManagementSystem.Application.Common.Services;
+using ParkingManagementSystem.Application.LoginUser.Models;
 using ParkingManagementSystem.Domain.User.ValueObjects;
 
 namespace ParkingManagementSystem.Application.LoginUser;
 
-public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, ErrorOr<string>>
+public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, ErrorOr<LoginUserResult>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordService _passwordService;
@@ -20,7 +21,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, ErrorOr
         _jwtTokenGenerator = jwtTokenGenerator;
     }
 
-    public async Task<ErrorOr<string>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<LoginUserResult>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         var email = Email.Create(request.Email);
         var user = await _userRepository.GetByEmailAsync(email, cancellationToken);
@@ -35,6 +36,6 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, ErrorOr
 
         var authToken = _jwtTokenGenerator.GenerateToken(user);
 
-        return authToken;
+        return new LoginUserResult(authToken, user);
     }
 }
