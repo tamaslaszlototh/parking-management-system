@@ -5,6 +5,7 @@
     <Project Path="ParkingManagementSystem.Contracts/ParkingManagementSystem.Contracts.csproj" />
     <Project Path="ParkingManagementSystem.Domain/ParkingManagementSystem.Domain.csproj" />
     <Project Path="ParkingManagementSystem.Infrastructure/ParkingManagementSystem.Infrastructure.csproj" />
+    <Project Path="ParkingManagementSystem.WebApp/ParkingManagementSystem.WebApp.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="ParkingManagementSystem.Application.UnitTests/ParkingManagementSystem.Application.UnitTests.csproj" />
