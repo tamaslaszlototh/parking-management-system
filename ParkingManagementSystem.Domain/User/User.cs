@@ -63,4 +63,9 @@ public sealed class User : AggregateRoot
         AssignedParkingSpotId = parkingSpotId;
         DomainEvents.Add(new ParkingSpotAssignedEvent(Id, parkingSpotId));
     }
+
+    public void RemoveParkingSpotAssignment()
+    {
+        AssignedParkingSpotId = null;
+    }
 }

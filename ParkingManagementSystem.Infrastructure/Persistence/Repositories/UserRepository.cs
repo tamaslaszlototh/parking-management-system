@@ -30,6 +30,12 @@ public class UserRepository : IUserRepository
         return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
 
+    public async Task<User?> GetByAssignedParkingSpotIdAsync(Guid parkingSpotId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Users.FirstOrDefaultAsync(u => u.AssignedParkingSpotId == parkingSpotId,
+            cancellationToken);
+    }
+
     public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _dbContext.Users.AnyAsync(u => u.Id == id, cancellationToken);

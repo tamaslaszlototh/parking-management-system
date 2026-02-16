@@ -8,6 +8,7 @@ public interface IUserRepository
     Task AddAsync(User user, CancellationToken cancellationToken);
     Task<User?> GetByEmailAsync(Email email, CancellationToken cancellationToken);
     Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<User?> GetByAssignedParkingSpotIdAsync(Guid parkingSpotId, CancellationToken cancellationToken);
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken);
     void Update(User user);
 }

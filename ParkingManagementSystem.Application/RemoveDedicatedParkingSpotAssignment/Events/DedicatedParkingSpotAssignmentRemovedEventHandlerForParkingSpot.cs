@@ -3,14 +3,16 @@ using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
 using ParkingManagementSystem.Domain.ParkingSpot.Events;
 using ParkingManagementSystem.Domain.Reservation;
 
-namespace ParkingManagementSystem.Application.CancelReservation.Events;
+namespace ParkingManagementSystem.Application.RemoveDedicatedParkingSpotAssignment.Events;
 
 public class
-    DedicatedParkingSpotAssignmentRemovedEventHandler : INotificationHandler<DedicatedParkingSpotAssignmentRemoved>
+    DedicatedParkingSpotAssignmentRemovedEventHandlerForParkingSpot : INotificationHandler<
+    DedicatedParkingSpotAssignmentRemoved>
 {
     private readonly IReservationsRepository _reservationsRepository;
 
-    public DedicatedParkingSpotAssignmentRemovedEventHandler(IReservationsRepository reservationsRepository)
+    public DedicatedParkingSpotAssignmentRemovedEventHandlerForParkingSpot(
+        IReservationsRepository reservationsRepository)
     {
         _reservationsRepository = reservationsRepository;
     }
