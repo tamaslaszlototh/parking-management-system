@@ -14,6 +14,16 @@ builder.Services
     .AddDomainLayer()
     .AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp", policy =>
+    {
+        var allowedOrigins = builder.Configuration.GetSection("CORS:AllowedOrigins").Get<string[]>() ?? [];
+        policy.WithOrigins(allowedOrigins)
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 var config = TypeAdapterConfig.GlobalSettings;
 config.Scan(Assembly.GetExecutingAssembly());
@@ -27,9 +37,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseCors("AllowAngularApp");
 app.AddInfrastructureMiddleware();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();
