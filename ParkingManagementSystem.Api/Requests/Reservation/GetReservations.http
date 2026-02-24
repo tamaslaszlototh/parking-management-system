@@ -1,0 +1,8 @@
+@Host = http://localhost:5196
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzYzRkYTRjMy0xOGI2LTQ0YmQtOTNiZS05MDUzNjAxM2JiYTAiLCJnaXZlbl9uYW1lIjoiTWFyayIsImVtYWlsIjoibWFyay5kYXJrQGRlbW8uY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiRW1wbG95ZWUiLCJqdGkiOiJhNDhmMjllMy0wYjM3LTQzOWEtYTQ3MS1jN2MyODc2MDZmNWEiLCJleHAiOjE3NzE5NjQzMjUsImlzcyI6IlBhcmtpbmcgTWFuYWdlbWVudCBTeXN0ZW0gU2VydmVyIiwiYXVkIjoiUGFya2luZyBNYW5hZ2VtZW50IFN5c3RlbSBDbGllbnQifQ.o-PGFaNyKuHEU_tKa1Xj5V8U4VdLlUZsowxrmjlLO3E
+
+GET {{Host}}/api/reservations?Dates=2026-02-24&Dates=2026-02-25
+Authorization: Bearer {{Token}}
+Content-Type: application/json
+
+###

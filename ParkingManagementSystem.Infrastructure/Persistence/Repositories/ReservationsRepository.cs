@@ -59,4 +59,11 @@ public class ReservationsRepository : IReservationsRepository
     {
         _dbContext.Reservations.Remove(reservation);
     }
+
+    public async Task<List<Reservation>> GetActiveReservationsForDatesAsync(List<DateOnly> dates,
+        CancellationToken cancellationToken)
+    {
+        return await _dbContext.Reservations.Where(r => dates.Contains(r.ReservationDate))
+            .ToListAsync(cancellationToken);
+    }
 }
