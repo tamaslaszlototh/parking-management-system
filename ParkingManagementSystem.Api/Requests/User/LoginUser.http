@@ -17,3 +17,12 @@ Content-Type: application/json
   "password": "Secret/password123"
 }
 ###
+
+POST {{Host}}/api/users/login
+Content-Type: application/json
+
+{
+  "email": "mark.dark@demo.com",
+  "password": "Secret/password123"
+}
+###

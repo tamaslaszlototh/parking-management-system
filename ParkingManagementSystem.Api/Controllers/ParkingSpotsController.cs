@@ -5,15 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 using ParkingManagementSystem.Application.AddParkingSpot.Commands;
 using ParkingManagementSystem.Application.AssignDedicatedParkingSpot;
 using ParkingManagementSystem.Application.DeactivateParkingSpot.Commands;
+using ParkingManagementSystem.Application.GetParkingSpots.Commands;
 using ParkingManagementSystem.Application.RemoveDedicatedParkingSpotAssignment;
 using ParkingManagementSystem.Contracts.ParkingSpot.AddParkingSpot;
 using ParkingManagementSystem.Contracts.ParkingSpot.AssignDedicatedParkingSpot;
 using ParkingManagementSystem.Contracts.ParkingSpot.DeactivateParkingSpot;
+using ParkingManagementSystem.Contracts.ParkingSpot.GetParkingSpots;
 
 namespace ParkingManagementSystem.Api.Controllers;
 
 [Route("api/[controller]")]
-[Authorize(Roles = "ParkingAdministrator")]
 public class ParkingSpotsController : ApiController
 {
     private readonly IMapper _mapper;
@@ -26,6 +27,7 @@ public class ParkingSpotsController : ApiController
     }
 
     [HttpPost("add-parking-spot")]
+    [Authorize(Roles = "ParkingAdministrator")]
     public async Task<IActionResult> AddParkingSpot(AddParkingSpotRequest request)
     {
         var command = _mapper.Map<AddParkingSpotCommand>(request);
@@ -36,6 +38,7 @@ public class ParkingSpotsController : ApiController
     }
 
     [HttpPost("assign-dedicated-parking-spot")]
+    [Authorize(Roles = "ParkingAdministrator")]
     public async Task<IActionResult> AssignDedicatedParkingSpot(AssignDedicatedParkingSpotRequest request)
     {
         var command = _mapper.Map<AssignDedicatedParkingSpotCommand>(request);
@@ -46,6 +49,7 @@ public class ParkingSpotsController : ApiController
     }
 
     [HttpPatch("{id:guid}/deactivate")]
+    [Authorize(Roles = "ParkingAdministrator")]
     public async Task<IActionResult> DeactivateParkingSpot(Guid id)
     {
         var command = new DeactivateParkingSpotCommand(id);
@@ -57,12 +61,24 @@ public class ParkingSpotsController : ApiController
     }
 
     [HttpPatch("{id:guid}/remove-assignment")]
+    [Authorize(Roles = "ParkingAdministrator")]
     public async Task<IActionResult> RemoveDedicatedParkingSpotAssignment(Guid id)
     {
         var command = new RemoveDedicatedParkingSpotAssignmentCommand(id);
         var result = await _mediator.Send(command);
         return result.Match(
             _ => Ok(),
+            errors => Problem(errors));
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "ParkingAdministrator,BusinessManager,Employee")]
+    public async Task<IActionResult> GetParkingSpots()
+    {
+        var command = new GetParkingSpotsCommand();
+        var result = await _mediator.Send(command);
+        return result.Match(
+            value => Ok(_mapper.Map<GetParkingSpotsResponse>(value)),
             errors => Problem(errors));
     }
 }
