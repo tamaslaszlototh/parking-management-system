@@ -1,8 +1,12 @@
 using Mapster;
 using ParkingManagementSystem.Application.CancelReservation;
+using ParkingManagementSystem.Application.GetReservationsForDates.Commands;
+using ParkingManagementSystem.Application.GetReservationsForDates.Models;
 using ParkingManagementSystem.Application.ReserveParkingSpot;
 using ParkingManagementSystem.Contracts.Reservation.CancelReservation;
+using ParkingManagementSystem.Contracts.Reservation.GetReservations;
 using ParkingManagementSystem.Contracts.Reservation.ReserveParkingSpot;
+using ParkingManagementSystem.Domain.Reservation;
 
 namespace ParkingManagementSystem.Api.Mappings;
 
@@ -21,5 +25,16 @@ public class ReservationMappingConfig : IRegister
 
         config.NewConfig<List<DateOnly>, CancelReservationResponse>()
             .Map(dest => dest.CancelledDates, src => src);
+
+        config.NewConfig<GetReservationsForDatesRequest, GetReservationsForDatesCommand>()
+            .Map(dest => dest.Dates, src => src.Dates);
+
+        config.NewConfig<Reservation, ReservationDto>()
+            .Map(dest => dest.Id, src => src.Id)
+            .Map(dest => dest.ParkingSpotId, src => src.ParkingSpotId)
+            .Map(dest => dest.ReservationDate, src => src.ReservationDate);
+
+        config.NewConfig<GetReservationsForDatesResult, GetReservationsForDatesResponse>()
+            .Map(dest => dest.Reservations, src => src.Reservations);
     }
 }

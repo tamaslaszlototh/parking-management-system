@@ -2,9 +2,11 @@ using Mapster;
 using ParkingManagementSystem.Application.LoginUser;
 using ParkingManagementSystem.Application.LoginUser.Models;
 using ParkingManagementSystem.Application.RegisterUser.Commands;
+using ParkingManagementSystem.Contracts.User;
 using ParkingManagementSystem.Contracts.User.LoginUser;
 using ParkingManagementSystem.Contracts.User.RegisterUser;
 using ParkingManagementSystem.Domain.User;
+using UserRole = ParkingManagementSystem.Domain.User.Enums.UserRole;
 
 namespace ParkingManagementSystem.Api.Mappings;
 
@@ -38,6 +40,6 @@ public class UserMappingConfig : IRegister
             .Map(dest => dest.FirstName, src => src.User.FirstName.Value)
             .Map(dest => dest.LastName, src => src.User.LastName.Value)
             .Map(dest => dest.Email, src => src.User.Email)
-            .Map(dest => dest.Roles, src => src.User.Role);
+            .Map(dest => dest.Roles, src => new List<UserRole> { src.User.Role });
     }
 }

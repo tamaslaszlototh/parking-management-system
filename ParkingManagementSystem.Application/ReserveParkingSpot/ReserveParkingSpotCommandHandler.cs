@@ -137,9 +137,9 @@ public class ReserveParkingSpotCommandHandler : IRequestHandler<ReserveParkingSp
     private ParkingSpot? GetFirstFreeParkingSpot(List<ParkingSpot> availableParkingSpots,
         List<Guid> reservedParkingSpotIds, Guid userId)
     {
-        return availableParkingSpots.FirstOrDefault(p =>
+        var rs = availableParkingSpots.FirstOrDefault(p =>
             !reservedParkingSpotIds.Contains(p.Id)
-            && (p.State == ParkingSpotState.Active
-                || (p.State == ParkingSpotState.Dedicated && p.ManagerId == userId)));
+            && p.State is ParkingSpotState.Active or ParkingSpotState.Dedicated);
+        return rs;
     }
 }
