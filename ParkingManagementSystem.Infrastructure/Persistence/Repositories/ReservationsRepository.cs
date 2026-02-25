@@ -66,4 +66,14 @@ public class ReservationsRepository : IReservationsRepository
         return await _dbContext.Reservations.Where(r => dates.Contains(r.ReservationDate))
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<List<Reservation>> GetReservationsForUserAsync(Guid userId, bool includeExpired,
+        CancellationToken cancellationToken)
+    {
+        return await _dbContext.Reservations
+            .Where(r =>
+                r.UserId == userId && (includeExpired || r.ReservationDate >= DateOnly.FromDateTime(DateTime.UtcNow)))
+            .OrderBy(r => r.ReservationDate)
+            .ToListAsync(cancellationToken);
+    }
 }

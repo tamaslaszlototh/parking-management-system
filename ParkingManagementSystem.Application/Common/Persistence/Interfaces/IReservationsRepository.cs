@@ -17,4 +17,7 @@ public interface IReservationsRepository
 
     Task<List<Reservation>> GetActiveReservationsForDatesAsync(List<DateOnly> dates,
         CancellationToken cancellationToken);
+
+    Task<List<Reservation>> GetReservationsForUserAsync(Guid userId, bool includeExpired,
+        CancellationToken cancellationToken);
 }
