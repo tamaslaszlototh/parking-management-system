@@ -1,0 +1,3 @@
+namespace ParkingManagementSystem.Contracts.Reservation.GetReservations;
+
+public record GetReservationsForUserResponse(List<ReservationDto> Reservations);

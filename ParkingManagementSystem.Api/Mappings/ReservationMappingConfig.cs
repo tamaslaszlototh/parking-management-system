@@ -2,6 +2,8 @@ using Mapster;
 using ParkingManagementSystem.Application.CancelReservation;
 using ParkingManagementSystem.Application.GetReservationsForDates.Commands;
 using ParkingManagementSystem.Application.GetReservationsForDates.Models;
+using ParkingManagementSystem.Application.GetReservationsForUser.Commands;
+using ParkingManagementSystem.Application.GetReservationsForUser.Models;
 using ParkingManagementSystem.Application.ReserveParkingSpot;
 using ParkingManagementSystem.Contracts.Reservation.CancelReservation;
 using ParkingManagementSystem.Contracts.Reservation.GetReservations;
@@ -35,6 +37,13 @@ public class ReservationMappingConfig : IRegister
             .Map(dest => dest.ReservationDate, src => src.ReservationDate);
 
         config.NewConfig<GetReservationsForDatesResult, GetReservationsForDatesResponse>()
+            .Map(dest => dest.Reservations, src => src.Reservations);
+
+        config.NewConfig<GetReservationsForUserRequest, GetReservationsForUserCommand>()
+            .Map(dest => dest.UserId, src => src.UserId)
+            .Map(dest => dest.IncludeExpired, src => src.IncludeExpired);
+
+        config.NewConfig<GetReservationsForUserResult, GetReservationsForUserResponse>()
             .Map(dest => dest.Reservations, src => src.Reservations);
     }
 }

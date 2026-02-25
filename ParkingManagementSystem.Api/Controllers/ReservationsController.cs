@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ParkingManagementSystem.Application.CancelReservation;
 using ParkingManagementSystem.Application.GetReservationsForDates.Commands;
+using ParkingManagementSystem.Application.GetReservationsForUser.Commands;
 using ParkingManagementSystem.Application.ReserveParkingSpot;
 using ParkingManagementSystem.Contracts.Reservation.CancelReservation;
 using ParkingManagementSystem.Contracts.Reservation.GetReservations;
@@ -49,6 +50,19 @@ public class ReservationsController : ApiController
         var result = await _mediator.Send(command);
         return result.Match(
             success => Ok(_mapper.Map<GetReservationsForDatesResponse>(success)),
+            error => Problem(error));
+    }
+
+    [HttpGet("{userId:guid}")]
+    public async Task<IActionResult> GetReservationsForUser(
+        [FromRoute] Guid userId,
+        [FromQuery] bool includeExpired = false)
+    {
+        var request = new GetReservationsForUserRequest(userId, includeExpired);
+        var command = _mapper.Map<GetReservationsForUserCommand>(request);
+        var result = await _mediator.Send(command);
+        return result.Match(
+            success => Ok(_mapper.Map<GetReservationsForUserResponse>(success)),
             error => Problem(error));
     }
 }
