@@ -32,5 +32,12 @@ public static class Errors
                 code: "ManagerIsAlreadyAssignedToParkingSpot",
                 description: "Manager is already assigned to a parking spot.");
         }
+
+        public static Error PasswordIsInvalid()
+        {
+            return Error.Forbidden(
+                code: "PasswordIsInvalid",
+                description: "The entered password is invalid.");
+        }
     }
 }
