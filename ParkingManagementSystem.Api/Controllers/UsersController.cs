@@ -2,8 +2,10 @@ using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ParkingManagementSystem.Application.ChangePassword;
 using ParkingManagementSystem.Application.LoginUser;
 using ParkingManagementSystem.Application.RegisterUser.Commands;
+using ParkingManagementSystem.Contracts.User.ChangePassword;
 using ParkingManagementSystem.Contracts.User.LoginUser;
 using ParkingManagementSystem.Contracts.User.RegisterUser;
 
@@ -40,6 +42,16 @@ public class UsersController : ApiController
         var result = await _mediator.Send(command);
         return result.Match(
             success => Ok(_mapper.Map<LoginUserResponse>(success)),
+            error => Problem(error));
+    }
+
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+    {
+        var command = _mapper.Map<ChangePasswordCommand>(request);
+        var result = await _mediator.Send(command);
+        return result.Match(
+            success => Ok(),
             error => Problem(error));
     }
 }

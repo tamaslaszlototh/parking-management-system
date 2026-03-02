@@ -11,7 +11,7 @@ public sealed class User : AggregateRoot
     public UserName LastName { get; }
     public Email Email { get; }
     public Phone Phone { get; }
-    public Password Password { get; }
+    public Password Password { get; private set; }
     public UserRole Role { get; }
     public Guid? AssignedParkingSpotId { get; private set; }
 
@@ -67,5 +67,10 @@ public sealed class User : AggregateRoot
     public void RemoveParkingSpotAssignment()
     {
         AssignedParkingSpotId = null;
+    }
+
+    public void ChangePassword(Password newPassword)
+    {
+        Password = newPassword;
     }
 }
