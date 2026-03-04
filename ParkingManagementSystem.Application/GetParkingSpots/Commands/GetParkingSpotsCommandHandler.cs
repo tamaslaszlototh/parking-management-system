@@ -2,6 +2,7 @@ using MediatR;
 using ParkingManagementSystem.Application.GetParkingSpots.Models;
 using ErrorOr;
 using ParkingManagementSystem.Application.Common.Persistence.Interfaces;
+using ParkingManagementSystem.Domain.ParkingSpot;
 
 namespace ParkingManagementSystem.Application.GetParkingSpots.Commands;
 
@@ -19,12 +20,22 @@ public class GetParkingSpotsCommandHandler : IRequestHandler<GetParkingSpotsComm
     {
         try
         {
-            var parkingSpots = await _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(cancellationToken);
+            List<ParkingSpot> parkingSpots;
+
+            if (request.IncludeDeactivated)
+            {
+                parkingSpots = await _parkingSpotsRepository.GetParkingSpotsAsync(cancellationToken);
+            }
+            else
+            {
+                parkingSpots = await _parkingSpotsRepository.GetNotDeactivatedParkingSpotsAsync(cancellationToken);
+            }
+
             var parkingSpotDtos =
-                parkingSpots.ConvertAll(p => new ParkingSpotDto(p.Id, p.Name.Value, p.Description?.Value));
+                parkingSpots.ConvertAll(p => new ParkingSpotDto(p.Id, p.Name.Value, p.Description?.Value, p.State));
             return new GetParkingSpotsResult(parkingSpotDtos);
         }
-        catch(Exception ex)
+        catch
         {
             return Error.Failure();
         }

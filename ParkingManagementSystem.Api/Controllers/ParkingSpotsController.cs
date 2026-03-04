@@ -81,4 +81,15 @@ public class ParkingSpotsController : ApiController
             value => Ok(_mapper.Map<GetParkingSpotsResponse>(value)),
             errors => Problem(errors));
     }
+
+    [HttpGet("include-deactivated")]
+    [Authorize(Roles = "ParkingAdministrator")]
+    public async Task<IActionResult> GetParkingSpotsIncludeDeactivated()
+    {
+        var command = new GetParkingSpotsCommand(IncludeDeactivated: true);
+        var result = await _mediator.Send(command);
+        return result.Match(
+            value => Ok(_mapper.Map<GetParkingSpotsResponse>(value)),
+            errors => Problem(errors));
+    }
 }

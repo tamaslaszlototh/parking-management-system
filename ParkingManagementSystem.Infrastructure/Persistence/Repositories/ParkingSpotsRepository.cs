@@ -30,6 +30,11 @@ public class ParkingSpotsRepository : IParkingSpotsRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<List<ParkingSpot>> GetParkingSpotsAsync(CancellationToken cancellationToken)
+    {
+        return await _dbContext.ParkingSpots.ToListAsync(cancellationToken);
+    }
+
     public void Update(ParkingSpot parkingSpot)
     {
         _dbContext.Update(parkingSpot);
