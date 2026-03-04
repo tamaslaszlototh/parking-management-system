@@ -7,5 +7,6 @@ public interface IParkingSpotsRepository
     Task AddAsync(ParkingSpot parkingSpot, CancellationToken cancellationToken);
     Task<ParkingSpot?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<List<ParkingSpot>> GetNotDeactivatedParkingSpotsAsync(CancellationToken cancellationToken);
+    Task<List<ParkingSpot>> GetParkingSpotsAsync(CancellationToken cancellationToken);
     void Update(ParkingSpot parkingSpot);
 }

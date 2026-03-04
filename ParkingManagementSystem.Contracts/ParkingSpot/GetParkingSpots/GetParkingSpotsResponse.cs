@@ -6,4 +6,5 @@ public record GetParkingSpotsResponse(
 public record ParkingSpotsDto(
     Guid Id,
     string Name,
-    string Description);
+    string Description,
+    ParkingSpotState State);

@@ -38,7 +38,8 @@ public class ParkingSpotMappingConfig : IRegister
         config.NewConfig<ParkingSpotDto, ParkingSpotsDto>()
             .Map(dest => dest.Id, src => src.Id)
             .Map(dest => dest.Name, src => src.Name)
-            .Map(dest => dest.Description, src => src.Description ?? string.Empty);
+            .Map(dest => dest.Description, src => src.Description ?? string.Empty)
+            .Map(dest => dest.State, src => src.State);
         
         config.NewConfig<GetParkingSpotsResult, GetParkingSpotsResponse>()
             .Map(dest => dest.ParkingSpots, src => src.ParkingSpots);
