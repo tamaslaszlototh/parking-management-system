@@ -316,11 +316,11 @@ public class DeactivateParkingSpotTests
         {
             _unitOfWork.BeginTransactionAsync(Arg.Any<CancellationToken>());
             _parkingSpotsRepository.GetByIdAsync(parkingSpotId, Arg.Any<CancellationToken>());
+            _reservationsRepository.GetReservationsForParkingSpotFromTodayAsync(parkingSpotId,
+                Arg.Any<CancellationToken>());
             _parkingSpotsRepository.Update(parkingSpot);
             _unitOfWork.SaveChangesAsync(Arg.Any<CancellationToken>());
             _unitOfWork.CommitTransactionAsync(Arg.Any<CancellationToken>());
-            _reservationsRepository.GetReservationsForParkingSpotFromTodayAsync(parkingSpotId,
-                Arg.Any<CancellationToken>());
         });
     }
 
@@ -360,9 +360,9 @@ public class DeactivateParkingSpotTests
         // Ensure commit happened before fetching reservations
         Received.InOrder(() =>
         {
-            _unitOfWork.CommitTransactionAsync(Arg.Any<CancellationToken>());
             _reservationsRepository.GetReservationsForParkingSpotFromTodayAsync(parkingSpotId,
                 Arg.Any<CancellationToken>());
+            _unitOfWork.CommitTransactionAsync(Arg.Any<CancellationToken>());
         });
     }
 }

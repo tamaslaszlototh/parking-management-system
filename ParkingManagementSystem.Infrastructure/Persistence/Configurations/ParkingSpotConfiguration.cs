@@ -38,5 +38,7 @@ public class ParkingSpotConfiguration : IEntityTypeConfiguration<ParkingSpot>
             .HasConversion(
                 state => state.ToString(),
                 state => Enum.Parse<ParkingSpotState>(state));
+
+        builder.Property(p => p.LastReservedDate);
     }
 }

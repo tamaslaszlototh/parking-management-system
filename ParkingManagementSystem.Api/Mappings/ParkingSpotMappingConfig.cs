@@ -39,10 +39,10 @@ public class ParkingSpotMappingConfig : IRegister
             .Map(dest => dest.Id, src => src.Id)
             .Map(dest => dest.Name, src => src.Name)
             .Map(dest => dest.Description, src => src.Description ?? string.Empty)
-            .Map(dest => dest.State, src => src.State);
-        
+            .Map(dest => dest.State, src => src.State)
+            .Map(dest => dest.LastReservedDate, src => src.LastReservedDate);
+
         config.NewConfig<GetParkingSpotsResult, GetParkingSpotsResponse>()
             .Map(dest => dest.ParkingSpots, src => src.ParkingSpots);
-
     }
 }

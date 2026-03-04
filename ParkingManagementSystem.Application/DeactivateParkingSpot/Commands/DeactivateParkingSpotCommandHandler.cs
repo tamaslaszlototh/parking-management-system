@@ -40,12 +40,6 @@ public class DeactivateParkingSpotCommandHandler : IRequestHandler<DeactivatePar
                 return ParkingSpotErrors.ParkingSpotIsAlreadyDeactivated();
             }
 
-            parkingSpot.Deactivate();
-            _parkingSpotsRepository.Update(parkingSpot);
-
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-            await _unitOfWork.CommitTransactionAsync(cancellationToken);
-
             var reservations =
                 await _reservationsRepository.GetReservationsForParkingSpotFromTodayAsync(parkingSpot.Id,
                     cancellationToken);
@@ -54,6 +48,12 @@ public class DeactivateParkingSpotCommandHandler : IRequestHandler<DeactivatePar
             var lastReservedDate = reservations.Count != 0
                 ? reservations.Max(r => r.ReservationDate)
                 : (DateOnly?)null;
+
+            parkingSpot.Deactivate(lastReservedDate);
+            _parkingSpotsRepository.Update(parkingSpot);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
             return new DeactivateParkingSpotCommandResult(reservationIds, lastReservedDate);
         }

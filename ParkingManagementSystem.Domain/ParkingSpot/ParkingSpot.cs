@@ -11,6 +11,7 @@ public sealed class ParkingSpot : AggregateRoot
     public ParkingSpotState State { get; private set; }
     public ParkingSpotDescription Description { get; }
     public Guid? ManagerId { get; private set; }
+    public DateOnly? LastReservedDate { get; private set; }
 
     private ParkingSpot(
         Guid id,
@@ -58,8 +59,9 @@ public sealed class ParkingSpot : AggregateRoot
         DomainEvents.Add(new DedicatedParkingSpotAssignmentRemoved(Id));
     }
 
-    public void Deactivate()
+    public void Deactivate(DateOnly? lastReservedDate)
     {
         State = ParkingSpotState.Deactivated;
+        LastReservedDate = lastReservedDate;
     }
 }

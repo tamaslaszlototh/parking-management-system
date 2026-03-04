@@ -7,4 +7,5 @@ public record ParkingSpotsDto(
     Guid Id,
     string Name,
     string Description,
-    ParkingSpotState State);
+    ParkingSpotState State,
+    DateOnly? LastReservedDate);

@@ -32,7 +32,7 @@ public class GetParkingSpotsCommandHandler : IRequestHandler<GetParkingSpotsComm
             }
 
             var parkingSpotDtos =
-                parkingSpots.ConvertAll(p => new ParkingSpotDto(p.Id, p.Name.Value, p.Description?.Value, p.State));
+                parkingSpots.ConvertAll(p => new ParkingSpotDto(p.Id, p.Name.Value, p.Description?.Value, p.State, p.LastReservedDate));
             return new GetParkingSpotsResult(parkingSpotDtos);
         }
         catch
