@@ -1,6 +1,7 @@
 using System.Reflection;
 using Mapster;
 using MapsterMapper;
+using ParkingManagementSystem.Api.Filters;
 using ParkingManagementSystem.Application;
 using ParkingManagementSystem.Domain;
 using ParkingManagementSystem.Infrastructure;
@@ -9,7 +10,8 @@ using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddScoped<LoggingActionFilter>();
+builder.Services.AddControllers(options => { options.Filters.AddService<LoggingActionFilter>(); });
 builder.Services.AddOpenApi();
 builder.Services
     .AddApplicationLayer()
