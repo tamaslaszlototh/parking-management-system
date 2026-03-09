@@ -1,5 +1,8 @@
+using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Reflection;
 using System.Security.Claims;
+using System.Text.Json;
 using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +16,15 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 {
     private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
     private readonly IHttpContextAccessor _context;
+
+    private static readonly ConcurrentDictionary<Type, PropertyInfo[]> PropertyCache = new();
+
+    private static readonly HashSet<string> SensitiveProperties = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "Password", "CurrentPassword", "NewPassword", "Token"
+    };
+
+    private const int MaxPropertiesToLog = 5;
 
     public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger, IHttpContextAccessor context)
     {
@@ -28,8 +40,8 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
         var userId = _context.HttpContext.User.FindFirst(ClaimTypes.Email)?.Value ?? "anonymous";
 
         _logger.LogInformation(
-            "[CorrelationId: {CorrelationId}] Handling {RequestName}. UserId: {UserId}",
-            correlationId, typeof(TRequest).Name, userId);
+            "[CorrelationId: {CorrelationId}] Handling {RequestName}. UserId: {UserId}. Request: {RequestProperties}",
+            correlationId, typeof(TRequest).Name, userId, GetRequestPropertiesJson(request));
 
         try
         {
@@ -63,5 +75,28 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 
             throw;
         }
+    }
+
+    private static string GetRequestPropertiesJson(TRequest request)
+    {
+        var type = typeof(TRequest);
+        var properties = PropertyCache.GetOrAdd(type, t =>
+            t.GetProperties()
+                .Where(p => !SensitiveProperties.Any(s => p.Name.Contains(s, StringComparison.OrdinalIgnoreCase)))
+                .Take(MaxPropertiesToLog)
+                .ToArray());
+
+        var dict = properties.ToDictionary(p => p.Name, p => GetPropertyValue(p.GetValue(request)));
+        return JsonSerializer.Serialize(dict);
+    }
+
+    private static object GetPropertyValue(object? value)
+    {
+        return value switch
+        {
+            null => "null",
+            IEnumerable<object> list => list.Select(GetPropertyValue).ToList(),
+            _ => value
+        };
     }
 }
